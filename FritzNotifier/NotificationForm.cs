@@ -35,24 +35,45 @@ namespace FritzNotifier
 
             // add any predefined ones here
 
-            foreach (string fileName in System.IO.Directory.GetFiles(System.Windows.Forms.Application.StartupPath, "*.dll", System.IO.SearchOption.TopDirectoryOnly))
+            if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"plugins\"))
             {
-                System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.LoadFrom(fileName);
-
-                var plugInTypes = pluginAssembly.GetTypes().Where(x => typeof(Plugins.INotifier).IsAssignableFrom(x));
-
-                foreach (Type pluginType in plugInTypes)
+                foreach (string fileName in System.IO.Directory.GetFiles(System.Windows.Forms.Application.StartupPath + @"plugins\", "*.dll", System.IO.SearchOption.TopDirectoryOnly))
                 {
-                    plugins.Add(Activator.CreateInstance(pluginType) as Plugins.INotifier);
+                    System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.LoadFrom(fileName);
+
+                    var plugInTypes = pluginAssembly.GetTypes().Where(x => typeof(Plugins.INotifier).IsAssignableFrom(x));
+
+                    foreach (Type pluginType in plugInTypes)
+                    {
+                        var plugin = Activator.CreateInstance(pluginType) as Plugins.INotifier;
+                        plugins.Add(plugin);
+                    }
                 }
             }
         }
 
         private void ReadSavedOptions()
         {
-            foreach (Plugins.INotifier plugin in plugins)
+            if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"\settings.xml"))
             {
-                // find options from plugin.NotificationApplication in configuration file and set up correct notificationsettings
+                System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load(System.Windows.Forms.Application.StartupPath + @"\settings.xml");
+                foreach (Plugins.INotifier plugin in plugins)
+                {
+                    /*
+                     * <Settings>
+                     *  <Setting Application="Twitter">
+                     *      <Option Id="1"><Numerics><Numeric>20</Numeric></Numerics></Option>
+                     *      <Option Id="3"><Gestures><Gesture>1</Gesture></Gestures></Option>
+                     *  </Setting>
+                     * </Settings>
+                     */
+                    // find options from plugin.NotificationApplication in configuration file and set up correct notificationsettings
+                    var setting = (from item in doc.Descendants("Setting") where item.Attributes("Application").FirstOrDefault().ToString() == plugin.NotificationApplication select item).FirstOrDefault();
+                    if (setting != null)
+                    {
+                        // look through each option in XML and create new options with correct values
+                    }
+                }
             }
         }
 
