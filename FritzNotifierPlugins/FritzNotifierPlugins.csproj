@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FritzNotifier.Objects">
+      <HintPath>..\FritzNotifierObjects\bin\Debug\FritzNotifier.Objects.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -42,17 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="INotifier.cs" />
-    <Compile Include="NotificationOptionsControl.cs">
+    <Compile Include="OptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NotificationOptionsControl.Designer.cs">
-      <DependentUpon>NotificationOptionsControl.cs</DependentUpon>
+    <Compile Include="OptionsControl.Designer.cs">
+      <DependentUpon>OptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NotificationOptionsControl.resx">
-      <DependentUpon>NotificationOptionsControl.cs</DependentUpon>
+    <EmbeddedResource Include="OptionsControl.resx">
+      <DependentUpon>OptionsControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

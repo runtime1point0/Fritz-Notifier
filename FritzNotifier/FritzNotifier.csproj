@@ -34,11 +34,14 @@
   <ItemGroup>
     <Reference Include="FritzNotifier.Objects">
       <HintPath>..\FritzNotifierObjects\bin\Debug\FritzNotifier.Objects.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FritzNotifier.Plugins">
       <HintPath>..\FritzNotifierPlugins\bin\Debug\FritzNotifier.Plugins.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqToTwitter">
+      <HintPath>.\LinqToTwitter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -61,6 +64,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Twitter\TwitterOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Twitter\TwitterOptionsControl.Designer.cs">
+      <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Twitter\TwitterNotifier.cs" />
     <EmbeddedResource Include="NotificationForm.resx">
       <DependentUpon>NotificationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -73,6 +83,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Twitter\TwitterOptionsControl.resx">
+      <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
