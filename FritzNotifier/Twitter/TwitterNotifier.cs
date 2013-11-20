@@ -10,6 +10,12 @@ namespace FritzNotifier.Twitter
     // built in notifier for twitter
     class TwitterNotifier : Plugins.INotifier
     {
+        private enum TwitterOptionId
+        {
+            TweetCount = 1,
+            DirectMessage = 2,
+        }
+
         public string NotificationApplication
         {
             get { return "Twitter"; }
@@ -66,38 +72,58 @@ namespace FritzNotifier.Twitter
                 {
 
 
+                    //try
+                    //{
+                    //    //Account account = accounts.SingleOrDefault();
+                    //    Account account = ctx.Account.Single(acct => acct.Type == AccountType.VerifyCredentials && acct.SkipStatus == true);
+                    //    //var account = twitterCtx.Account
+                    //    //    .Where(t => t.Type == AccountType.VerifyCredentials)
+                    //    //    .FirstOrDefault(t => t.SkipStatus == true);
+                    //    User user = account.User;
+                    //    Status tweet = user.Status ?? new Status();
+                    //    Console.WriteLine("User (#" + user.Identifier.ID
+                    //                        + "): " + user.Identifier.ScreenName
+                    //                        + "\nTweet: " + tweet.Text
+                    //                        + "\nTweet ID: " + tweet.StatusID + "\n");
+
+                    //    Console.WriteLine("Account credentials are verified.");
+                    //}
+                    //catch (System.Net.WebException wex)
+                    //{
+                    //    Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
+                    //}
+
+
                     try
                     {
-                        //Account account = accounts.SingleOrDefault();
-                        Account account = ctx.Account.Single(acct => acct.Type == AccountType.VerifyCredentials && acct.SkipStatus == true);
-                        //var account = twitterCtx.Account
-                        //    .Where(t => t.Type == AccountType.VerifyCredentials)
-                        //    .FirstOrDefault(t => t.SkipStatus == true);
-                        User user = account.User;
-                        Status tweet = user.Status ?? new Status();
-                        Console.WriteLine("User (#" + user.Identifier.ID
-                                            + "): " + user.Identifier.ScreenName
-                                            + "\nTweet: " + tweet.Text
-                                            + "\nTweet ID: " + tweet.StatusID + "\n");
+                        foreach (Objects.Option option in options/*.Where(x => x.Active)*/)
+                        {
+                            switch ((TwitterOptionId)option.OptionId)
+                            {
+                                case TwitterOptionId.TweetCount:
+                                    //System.Windows.Forms.MessageBox.Show("Looking for Tweet Count");
+                                    break;
+                                case TwitterOptionId.DirectMessage:
+                                    var directMsgs =
+                                        (from dm in ctx.DirectMessage
+                                         where dm.Type == DirectMessageType.Show &&
+                                         dm.CreatedAt > option.LastAccessed
+                                         select dm).ToList();
+                                    foreach (var directMsg in directMsgs)
+                                    {
+                                        // handle appropriately
+                                        var newNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, null, DateTime.Now);
+                                        notifications.Add(newNotification);
+                                    }
 
-                        Console.WriteLine("Account credentials are verified.");
+                                    break;
+                            }
+                        }
                     }
                     catch (System.Net.WebException wex)
                     {
                         Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
                     }
-
-
-                    //foreach (Objects.Option option in options.Where(x => x.Active))
-                    //{
-                    //    switch (option.OptionId)
-                    //    {
-                    //        case 1:
-                    //            break;
-                    //        case 2:
-                    //            break;
-                    //    }
-                    //}
                 }
             }
 

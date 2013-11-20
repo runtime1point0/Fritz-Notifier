@@ -129,5 +129,6 @@ namespace FritzNotifier
 
         private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
         private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
+        private List<Objects.Notification> notifications = new List<Objects.Notification>();
     }
 }

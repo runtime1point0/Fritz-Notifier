@@ -13,6 +13,7 @@ namespace FritzNotifier.Objects
             this.optionId = optionId;
             this.gestures = gestures;
             this.numerics = numerics;
+            this.LastAccessed = System.DateTime.Now;
         }
 
         public Option(int optionId, List<int> gestures, List<int> numerics, bool active)
@@ -21,6 +22,16 @@ namespace FritzNotifier.Objects
             this.gestures = gestures;
             this.numerics = numerics;
             this.Active = active;
+            this.LastAccessed = System.DateTime.Now;
+        }
+
+        public Option(int optionId, List<int> gestures, List<int> numerics, bool active, DateTime lastAccessed)
+        {
+            this.optionId = optionId;
+            this.gestures = gestures;
+            this.numerics = numerics;
+            this.Active = active;
+            this.LastAccessed = System.DateTime.Now;
         }
 
         /// <summary>
@@ -33,6 +44,8 @@ namespace FritzNotifier.Objects
         /// Whether or not the user has selected to use this particular notification
         /// </summary>
         public bool Active { get; set; }
+
+        public DateTime LastAccessed { get; set; }
 
         /// <summary>
         /// Gestures associated with this option.  Might have no gestures with a particular option, one gesture, or more than one gesture if gestures are set up conditionally based on which <see cref="Numerics"/> are entered.
