@@ -111,7 +111,7 @@ namespace FritzNotifier.Twitter
                                          tweet.CreatedAt > option.LastAccessed
                                          select tweet).Count();
 
-                                        var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", null, currentDate);
+                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
                                         option.LastAccessed = currentDate;
                                         notifications.Add(newTweetCountNotification);
                                     }
@@ -125,7 +125,7 @@ namespace FritzNotifier.Twitter
                                     foreach (var directMsg in directMsgs)
                                     {
                                         // handle appropriately
-                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, null, currentDate);
+                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
                                         notifications.Add(newDirectMessageNotification);
                                         option.LastAccessed = currentDate;
                                     }

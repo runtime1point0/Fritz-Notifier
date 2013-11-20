@@ -59,10 +59,10 @@ namespace FritzNotifier
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
             // temporary
-            //TestTwitter();
+            TestFirst();
         }
 
-        private void TestTwitter()
+        private void TestFirst()
         {
             notifications.AddRange(plugins[0].TestForNotifications(pluginOptions[plugins[0].NotificationApplication]));
         }
@@ -77,8 +77,8 @@ namespace FritzNotifier
 
 
             // add any predefined ones here
-            plugins.Add(new Twitter.TwitterNotifier());
-            //plugins.Add(new Twitter.FacebookNotifier());
+            //plugins.Add(new Twitter.TwitterNotifier());
+            plugins.Add(new Facebook.FacebookNotifier());
 
             if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"plugins\"))
             {

@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>.\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="FritzNotifier.Objects">
       <HintPath>..\FritzNotifierObjects\bin\Debug\FritzNotifier.Objects.dll</HintPath>
       <Private>True</Private>
@@ -57,6 +60,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facebook\FacebookNotifier.cs" />
+    <Compile Include="Facebook\FacebookOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Facebook\FacebookOptionsControl.Designer.cs">
+      <DependentUpon>FacebookOptionsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotificationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -84,6 +94,9 @@
       <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Twitter\TwitterNotifier.cs" />
+    <EmbeddedResource Include="Facebook\FacebookOptionsControl.resx">
+      <DependentUpon>FacebookOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NotificationControl.resx">
       <DependentUpon>NotificationControl.cs</DependentUpon>
     </EmbeddedResource>
