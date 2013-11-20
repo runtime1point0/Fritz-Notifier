@@ -29,7 +29,7 @@ namespace FritzNotifier
 
         private void TestTwitter()
         {
-            plugins[0].TestForNotifications(pluginOptions[plugins[0].NotificationApplication]);
+            notifications.AddRange(plugins[0].TestForNotifications(pluginOptions[plugins[0].NotificationApplication]));
         }
 
         private void LoadPlugins()

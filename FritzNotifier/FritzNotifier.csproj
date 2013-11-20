@@ -57,6 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NotificationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NotificationControl.Designer.cs">
+      <DependentUpon>NotificationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,9 @@
       <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Twitter\TwitterNotifier.cs" />
+    <EmbeddedResource Include="NotificationControl.resx">
+      <DependentUpon>NotificationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NotificationForm.resx">
       <DependentUpon>NotificationForm.cs</DependentUpon>
     </EmbeddedResource>

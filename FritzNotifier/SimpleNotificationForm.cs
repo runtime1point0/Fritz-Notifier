@@ -16,6 +16,12 @@ namespace FritzNotifier
         public SimpleNotificationForm()
         {
             InitializeComponent();
+            twitterOptions = twitterPlugin.GetAllAvailableOptions();
+
+            notificationCategoryBox.Items.Clear();
+            notificationCategoryBox.Items.Add(twitterPlugin.NotificationApplication);
+
+            notificationCategoryBox.Items.Add("Facebook");
         }
 
         private void dismissButton_Click(object sender, EventArgs e)
@@ -26,7 +32,19 @@ namespace FritzNotifier
         private void goToSiteButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine(sender);
-            Process.Start("http://" + "facebook" + ".com");
+            // if implement plugin collection, search for appropriate one here
+            if (notificationCategoryBox.SelectedValue.ToString() == twitterPlugin.NotificationApplication)
+            {
+                Process.Start(twitterPlugin.WebsiteOrProgramAddress);
+            }
+            else
+            {
+                Process.Start("http://" + "facebook" + ".com");
+            }
         }
+
+        private Plugins.INotifier twitterPlugin = new Twitter.TwitterNotifier();
+        private List<Objects.Option> twitterOptions = new List<Objects.Option>();
+        private List<Objects.Notification> notifications = new List<Objects.Notification>();
     }
 }
