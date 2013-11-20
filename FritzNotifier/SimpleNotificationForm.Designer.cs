@@ -68,11 +68,11 @@
             // detailedViewButton
             // 
             this.detailedViewButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.detailedViewButton.Location = new System.Drawing.Point(129, 6);
+            this.detailedViewButton.Location = new System.Drawing.Point(93, 6);
             this.detailedViewButton.Name = "detailedViewButton";
-            this.detailedViewButton.Size = new System.Drawing.Size(75, 23);
+            this.detailedViewButton.Size = new System.Drawing.Size(111, 23);
             this.detailedViewButton.TabIndex = 3;
-            this.detailedViewButton.Text = "Detailed";
+            this.detailedViewButton.Text = "Detailed Overview";
             this.detailedViewButton.UseVisualStyleBackColor = true;
             this.detailedViewButton.Click += new System.EventHandler(this.detailedViewButton_Click);
             // 
