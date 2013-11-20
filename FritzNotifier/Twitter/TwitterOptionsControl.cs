@@ -12,7 +12,7 @@ namespace FritzNotifier.Twitter
 {
     public partial class TwitterOptionsControl : Plugins.OptionsControl
     {
-        public TwitterOptionsControl()
+        public TwitterOptionsControl() : base()
         {
             InitializeComponent();
         }
@@ -23,7 +23,7 @@ namespace FritzNotifier.Twitter
             SetOptionValues(initialValues);
         }
 
-        public override void SetOptionValues(List<Objects.Option> initialValues)
+        protected override void SetOptionValues(List<Objects.Option> initialValues)
         {
             foreach (Objects.Option option in initialValues)
             {

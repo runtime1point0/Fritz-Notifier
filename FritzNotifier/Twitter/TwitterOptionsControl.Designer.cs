@@ -35,10 +35,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.TweetCountMinutesNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
+            // ApplyChangesButton
+            // 
+            this.ApplyChangesButton.Visible = true;
+            // 
+            // CancelButton
+            // 
+            this.CancelButton.Visible = true;
+            // 
             // TweetCountCheckbox
             // 
             this.TweetCountCheckbox.AutoSize = true;
-            this.TweetCountCheckbox.Location = new System.Drawing.Point(16, 30);
+            this.TweetCountCheckbox.Location = new System.Drawing.Point(16, 46);
             this.TweetCountCheckbox.Name = "TweetCountCheckbox";
             this.TweetCountCheckbox.Size = new System.Drawing.Size(166, 17);
             this.TweetCountCheckbox.TabIndex = 0;
@@ -47,7 +55,7 @@
             // 
             // TweetCountMinutesNumericUpDown
             // 
-            this.TweetCountMinutesNumericUpDown.Location = new System.Drawing.Point(179, 30);
+            this.TweetCountMinutesNumericUpDown.Location = new System.Drawing.Point(179, 46);
             this.TweetCountMinutesNumericUpDown.Maximum = new decimal(new int[] {
             180,
             0,
@@ -70,7 +78,7 @@
             // TweetCountMinuteLabel
             // 
             this.TweetCountMinuteLabel.AutoSize = true;
-            this.TweetCountMinuteLabel.Location = new System.Drawing.Point(225, 33);
+            this.TweetCountMinuteLabel.Location = new System.Drawing.Point(225, 49);
             this.TweetCountMinuteLabel.Name = "TweetCountMinuteLabel";
             this.TweetCountMinuteLabel.Size = new System.Drawing.Size(46, 13);
             this.TweetCountMinuteLabel.TabIndex = 2;
@@ -79,7 +87,7 @@
             // ReadDirectMessagecheckBox
             // 
             this.ReadDirectMessagecheckBox.AutoSize = true;
-            this.ReadDirectMessagecheckBox.Location = new System.Drawing.Point(16, 66);
+            this.ReadDirectMessagecheckBox.Location = new System.Drawing.Point(16, 82);
             this.ReadDirectMessagecheckBox.Name = "ReadDirectMessagecheckBox";
             this.ReadDirectMessagecheckBox.Size = new System.Drawing.Size(154, 17);
             this.ReadDirectMessagecheckBox.TabIndex = 3;
@@ -96,6 +104,12 @@
             this.Controls.Add(this.TweetCountCheckbox);
             this.Name = "TwitterOptionsControl";
             this.Size = new System.Drawing.Size(394, 124);
+            this.Controls.SetChildIndex(this.TweetCountCheckbox, 0);
+            this.Controls.SetChildIndex(this.TweetCountMinutesNumericUpDown, 0);
+            this.Controls.SetChildIndex(this.TweetCountMinuteLabel, 0);
+            this.Controls.SetChildIndex(this.ReadDirectMessagecheckBox, 0);
+            this.Controls.SetChildIndex(this.ApplyChangesButton, 0);
+            this.Controls.SetChildIndex(this.CancelButton, 0);
             ((System.ComponentModel.ISupportInitialize)(this.TweetCountMinutesNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
