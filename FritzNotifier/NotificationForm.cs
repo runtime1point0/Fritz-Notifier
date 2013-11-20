@@ -190,7 +190,7 @@ namespace FritzNotifier
                     editingOptionsControlHolderPanel.Controls[i].Dispose();
                 }
                 editingOptionsControlHolderPanel.Controls.Add(
-                    plugins.Single(x => x.NotificationApplication == notificationToConfigureComboBox.SelectedText).CreateOptionsControl(pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()]));
+                    plugins.Single(x => x.NotificationApplication == notificationToConfigureComboBox.SelectedValue.ToString()).CreateOptionsControl(pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()]));
             }
             else
             {
