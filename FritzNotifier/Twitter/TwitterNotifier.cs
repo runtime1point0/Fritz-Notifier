@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LinqToTwitter;
 
 namespace FritzNotifier.Twitter
 {
@@ -12,6 +13,11 @@ namespace FritzNotifier.Twitter
         public string NotificationApplication
         {
             get { return "Twitter"; }
+        }
+
+        public string WebsiteOrProgramAddress
+        {
+            get { return "http://www.twitter.com"; }
         }
 
         public Plugins.OptionsControl CreateOptionsControl(List<Objects.Option> initialValues)
@@ -39,37 +45,59 @@ namespace FritzNotifier.Twitter
         {
             var notifications = new List<Objects.Notification>(options.Count);
 
-            if (options.Count(x => x.Active) > 0)
+            //if (options.Count(x => x.Active) > 0)
             {
                 var auth = new LinqToTwitter.SingleUserAuthorizer
                 {
                     Credentials = new LinqToTwitter.SingleUserInMemoryCredentials
                     {
-                        ConsumerKey = "consumerKey",
-                        ConsumerSecret = "consumerSecret",
+                        ConsumerKey = System.Configuration.ConfigurationManager.AppSettings.Get("consumerKey"),
+                        ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings.Get("consumerSecret"),
                         //AccessToken = "accessToken",
                         //AccessTokenSecret = "accessTokenSecret"
-                        TwitterAccessToken = "accessToken",
-                        TwitterAccessTokenSecret = "accessTokenSecret"
+                        TwitterAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("accessToken"),
+                        TwitterAccessTokenSecret = System.Configuration.ConfigurationManager.AppSettings.Get("accessTokenSecret")
                     }
                 };
 
                 auth.Authorize();
 
-                var ctx = new LinqToTwitter.TwitterContext(auth);
-
-
-                //return auth;
-
-                foreach (Objects.Option option in options.Where(x => x.Active))
+                using (var ctx = new LinqToTwitter.TwitterContext(auth))
                 {
-                    switch (option.OptionId)
+
+
+                    try
                     {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
+                        //Account account = accounts.SingleOrDefault();
+                        Account account = ctx.Account.Single(acct => acct.Type == AccountType.VerifyCredentials && acct.SkipStatus == true);
+                        //var account = twitterCtx.Account
+                        //    .Where(t => t.Type == AccountType.VerifyCredentials)
+                        //    .FirstOrDefault(t => t.SkipStatus == true);
+                        User user = account.User;
+                        Status tweet = user.Status ?? new Status();
+                        Console.WriteLine("User (#" + user.Identifier.ID
+                                            + "): " + user.Identifier.ScreenName
+                                            + "\nTweet: " + tweet.Text
+                                            + "\nTweet ID: " + tweet.StatusID + "\n");
+
+                        Console.WriteLine("Account credentials are verified.");
                     }
+                    catch (System.Net.WebException wex)
+                    {
+                        Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
+                    }
+
+
+                    //foreach (Objects.Option option in options.Where(x => x.Active))
+                    //{
+                    //    switch (option.OptionId)
+                    //    {
+                    //        case 1:
+                    //            break;
+                    //        case 2:
+                    //            break;
+                    //    }
+                    //}
                 }
             }
 

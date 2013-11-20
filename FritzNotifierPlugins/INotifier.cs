@@ -10,10 +10,14 @@ namespace FritzNotifier.Plugins
     {
         string NotificationApplication { get; }
 
+        string WebsiteOrProgramAddress { get; }
+
         // gets options for notification for this application with IDs and any defaults set
         List<Objects.Option> GetAllAvailableOptions();
 
         // subclass of NotificationOptionsControl that displays the options
         OptionsControl CreateOptionsControl(List<Objects.Option> initialValues);
+
+        List<Objects.Notification> TestForNotifications(List<Objects.Option> options);
     }
 }

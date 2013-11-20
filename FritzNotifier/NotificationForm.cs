@@ -22,6 +22,14 @@ namespace FritzNotifier
         {
             LoadPlugins();
             ReadSavedOptions();
+
+            // temporary
+            //TestTwitter();
+        }
+
+        private void TestTwitter()
+        {
+            plugins[0].TestForNotifications(pluginOptions[plugins[0].NotificationApplication]);
         }
 
         private void LoadPlugins()
@@ -34,6 +42,8 @@ namespace FritzNotifier
 
 
             // add any predefined ones here
+            plugins.Add(new Twitter.TwitterNotifier());
+            //plugins.Add(new Twitter.FacebookNotifier());
 
             if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"plugins\"))
             {
@@ -54,29 +64,70 @@ namespace FritzNotifier
 
         private void ReadSavedOptions()
         {
+            System.Xml.Linq.XDocument doc = null;
+
             if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"\settings.xml"))
             {
-                System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load(System.Windows.Forms.Application.StartupPath + @"\settings.xml");
-                foreach (Plugins.INotifier plugin in plugins)
+                doc = System.Xml.Linq.XDocument.Load(System.Windows.Forms.Application.StartupPath + @"\settings.xml");
+            }
+
+            foreach (Plugins.INotifier plugin in plugins)
+            {
+                /*
+                 * <Settings>
+                 *  <Setting Application="Twitter">
+                 *      <Option Id="1" Active="true"><Numerics><Numeric>20</Numeric></Numerics></Option>
+                 *      <Option Id="3" Active="false"><Gestures><Gesture>1</Gesture></Gestures></Option>
+                 *  </Setting>
+                 * </Settings>
+                 */
+                // find options from plugin.NotificationApplication in configuration file and set up correct notificationsettings
+
+                System.Xml.Linq.XElement settingElement = null;
+                if (doc != null)
                 {
-                    /*
-                     * <Settings>
-                     *  <Setting Application="Twitter">
-                     *      <Option Id="1"><Numerics><Numeric>20</Numeric></Numerics></Option>
-                     *      <Option Id="3"><Gestures><Gesture>1</Gesture></Gestures></Option>
-                     *  </Setting>
-                     * </Settings>
-                     */
-                    // find options from plugin.NotificationApplication in configuration file and set up correct notificationsettings
-                    var setting = (from item in doc.Descendants("Setting") where item.Attributes("Application").FirstOrDefault().ToString() == plugin.NotificationApplication select item).FirstOrDefault();
-                    if (setting != null)
-                    {
-                        // look through each option in XML and create new options with correct values
-                    }
+                    settingElement = (from item in doc.Descendants("Setting") where item.Attributes("Application").FirstOrDefault().ToString() == plugin.NotificationApplication select item).FirstOrDefault();
                 }
+                SetupPluginOptions(plugin, settingElement);
             }
         }
 
+        private void SetupPluginOptions(Plugins.INotifier plugin, System.Xml.Linq.XElement settingElement)
+        {
+            var options = plugin.GetAllAvailableOptions();
+
+            if (settingElement != null)
+            {
+                foreach (var optionElement in (from configuredOption in settingElement.Descendants("Options") select configuredOption))
+                {
+                    var numericsElement = optionElement.Element("Numerics");
+                    var numerics = new List<int>();
+                    // TODO: loop through and set up all numerics
+
+                    var gesturesElement = optionElement.Element("Gestures");
+                    var gestures = new List<int>();
+                    // TODO: loop through and set up all gestures
+
+                    var active = Convert.ToBoolean(optionElement.Attribute("Active").Value);
+
+                    int index = options.FindIndex(x => x.OptionId == Convert.ToInt32(optionElement.Attribute("Id").Value));
+
+                    var newOption = new Objects.Option(Convert.ToInt32(optionElement.Attribute("Id").Value), gestures, numerics, active);
+                    if (index == -1)
+                    {
+                        options.Add(newOption);
+                    }
+                    else
+                    {
+                        options[index] = newOption;
+                    }
+                }
+            }
+
+            pluginOptions[plugin.NotificationApplication] = options;
+        }
+
         private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
+        private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
     }
 }
