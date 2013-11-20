@@ -56,6 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimpleNotificationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimpleNotificationForm.Designer.cs">
+      <DependentUpon>SimpleNotificationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SimpleNotificationForm.resx">
+      <DependentUpon>SimpleNotificationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Twitter\TwitterOptionsControl.resx">
       <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
