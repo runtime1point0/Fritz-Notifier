@@ -18,10 +18,45 @@ namespace FritzNotifier
             InitializeComponent();
         }
 
+        private class EmptyNotifier : Plugins.INotifier
+        {
+            public Plugins.OptionsControl CreateOptionsControl(List<Objects.Option> initialValues)
+            {
+                throw new NotImplementedException();
+            }
+
+            public List<Objects.Option> GetAllAvailableOptions()
+            {
+                throw new NotImplementedException();
+            }
+
+            public string NotificationApplication
+            {
+                get { return string.Empty; }
+            }
+
+            public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
+            {
+                throw new NotImplementedException();
+            }
+
+            public string WebsiteOrProgramAddress
+            {
+                get { throw new NotImplementedException(); }
+            }
+        }
+
         private void NotificationForm_Load(object sender, EventArgs e)
         {
             LoadPlugins();
             ReadSavedOptions();
+
+            List<Plugins.INotifier> pluginsWithBlank = new List<Plugins.INotifier>(plugins.Count);
+            pluginsWithBlank.Add(new EmptyNotifier());
+            pluginsWithBlank.AddRange(plugins);
+            notificationToConfigureComboBox.DataSource = pluginsWithBlank;
+            notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
+            notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
             // temporary
             //TestTwitter();
@@ -134,15 +169,37 @@ namespace FritzNotifier
 
         private void quickOverViewButton_Click(object sender, EventArgs e)
         {
-
-            if (this.childForm == null) 
+            if (this.childForm == null)
             {
                 childForm = new SimpleNotificationForm(this);
             }
+
             this.Visible = false;
             this.Enabled = false;
             childForm.Enabled = true;
             childForm.Visible = true;
+            //childForm.ShowDialog(this);
+        }
+
+        private void notificationToConfigureComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (pluginOptions.ContainsKey(notificationToConfigureComboBox.SelectedValue.ToString()))
+            {
+                for (int i = editingOptionsControlHolderPanel.Controls.Count - 1; i >= 0; i--)
+                {
+                    editingOptionsControlHolderPanel.Controls[i].Dispose();
+                }
+                editingOptionsControlHolderPanel.Controls.Add(
+                    plugins.Single(x => x.NotificationApplication == notificationToConfigureComboBox.SelectedText).CreateOptionsControl(pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()]));
+            }
+            else
+            {
+                for (int i = editingOptionsControlHolderPanel.Controls.Count - 1; i >= 0; i--)
+                {
+                    editingOptionsControlHolderPanel.Controls[i].Dispose();
+                }
+                editingOptionsControlHolderPanel.Controls.Add(new Plugins.OptionsControl());
+            }
         }
     }
 }

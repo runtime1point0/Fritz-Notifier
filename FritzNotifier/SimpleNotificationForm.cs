@@ -59,11 +59,11 @@ namespace FritzNotifier
 
         private void detailedViewButton_Click(object sender, EventArgs e)
         {
+            //this.Hide();
             this.Visible = false;
             this.Enabled = false;
             this.parentForm.Visible = true;
             this.parentForm.Enabled = true;
-
         }
     }
 }

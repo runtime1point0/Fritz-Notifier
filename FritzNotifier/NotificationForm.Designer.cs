@@ -28,19 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainTabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.notificationsTabPage = new System.Windows.Forms.TabPage();
             this.quickOverViewButton = new System.Windows.Forms.Button();
             this.notificationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.configureNotificationsTabPage = new System.Windows.Forms.TabPage();
+            this.ConfigureForLabel = new System.Windows.Forms.Label();
+            this.notificationToConfigureComboBox = new System.Windows.Forms.ComboBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.mainTabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.notificationsTabPage.SuspendLayout();
+            this.configureNotificationsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTabControl
             // 
-            this.mainTabControl.Controls.Add(this.tabPage1);
-            this.mainTabControl.Controls.Add(this.tabPage2);
+            this.mainTabControl.Controls.Add(this.notificationsTabPage);
+            this.mainTabControl.Controls.Add(this.configureNotificationsTabPage);
             this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
             this.mainTabControl.Name = "mainTabControl";
@@ -48,17 +55,17 @@
             this.mainTabControl.Size = new System.Drawing.Size(1078, 598);
             this.mainTabControl.TabIndex = 0;
             // 
-            // tabPage1
+            // notificationsTabPage
             // 
-            this.tabPage1.Controls.Add(this.quickOverViewButton);
-            this.tabPage1.Controls.Add(this.notificationTableLayoutPanel);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1070, 572);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Notifications";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.notificationsTabPage.Controls.Add(this.quickOverViewButton);
+            this.notificationsTabPage.Controls.Add(this.notificationTableLayoutPanel);
+            this.notificationsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.notificationsTabPage.Name = "notificationsTabPage";
+            this.notificationsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.notificationsTabPage.Size = new System.Drawing.Size(1070, 572);
+            this.notificationsTabPage.TabIndex = 0;
+            this.notificationsTabPage.Text = "Notifications";
+            this.notificationsTabPage.UseVisualStyleBackColor = true;
             // 
             // quickOverViewButton
             // 
@@ -83,15 +90,47 @@
             this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 566);
             this.notificationTableLayoutPanel.TabIndex = 0;
             // 
-            // tabPage2
+            // configureNotificationsTabPage
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1070, 572);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Settings";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.configureNotificationsTabPage.Controls.Add(this.editingOptionsControlHolderPanel);
+            this.configureNotificationsTabPage.Controls.Add(this.ConfigureForLabel);
+            this.configureNotificationsTabPage.Controls.Add(this.notificationToConfigureComboBox);
+            this.configureNotificationsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.configureNotificationsTabPage.Name = "configureNotificationsTabPage";
+            this.configureNotificationsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.configureNotificationsTabPage.Size = new System.Drawing.Size(1070, 572);
+            this.configureNotificationsTabPage.TabIndex = 1;
+            this.configureNotificationsTabPage.Text = "Configure Notifications";
+            this.configureNotificationsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigureForLabel
+            // 
+            this.ConfigureForLabel.AutoSize = true;
+            this.ConfigureForLabel.Location = new System.Drawing.Point(8, 18);
+            this.ConfigureForLabel.Name = "ConfigureForLabel";
+            this.ConfigureForLabel.Size = new System.Drawing.Size(67, 13);
+            this.ConfigureForLabel.TabIndex = 1;
+            this.ConfigureForLabel.Text = "Configure for";
+            // 
+            // notificationToConfigureComboBox
+            // 
+            this.notificationToConfigureComboBox.FormattingEnabled = true;
+            this.notificationToConfigureComboBox.Location = new System.Drawing.Point(79, 15);
+            this.notificationToConfigureComboBox.Name = "notificationToConfigureComboBox";
+            this.notificationToConfigureComboBox.Size = new System.Drawing.Size(121, 21);
+            this.notificationToConfigureComboBox.TabIndex = 0;
+            this.notificationToConfigureComboBox.SelectedIndexChanged += new System.EventHandler(this.notificationToConfigureComboBox_SelectedIndexChanged);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // editingOptionsControlHolderPanel
+            // 
+            this.editingOptionsControlHolderPanel.Location = new System.Drawing.Point(11, 42);
+            this.editingOptionsControlHolderPanel.Name = "editingOptionsControlHolderPanel";
+            this.editingOptionsControlHolderPanel.Size = new System.Drawing.Size(648, 420);
+            this.editingOptionsControlHolderPanel.TabIndex = 2;
             // 
             // NotificationForm
             // 
@@ -103,7 +142,10 @@
             this.Text = "Fritz Notifier";
             this.Load += new System.EventHandler(this.NotificationForm_Load);
             this.mainTabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.notificationsTabPage.ResumeLayout(false);
+            this.configureNotificationsTabPage.ResumeLayout(false);
+            this.configureNotificationsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -111,10 +153,14 @@
         #endregion
 
         private System.Windows.Forms.TabControl mainTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage notificationsTabPage;
+        private System.Windows.Forms.TabPage configureNotificationsTabPage;
         private System.Windows.Forms.TableLayoutPanel notificationTableLayoutPanel;
         private System.Windows.Forms.Button quickOverViewButton;
+        private System.Windows.Forms.ComboBox notificationToConfigureComboBox;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Label ConfigureForLabel;
+        private System.Windows.Forms.Panel editingOptionsControlHolderPanel;
     }
 }
 
