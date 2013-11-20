@@ -16,7 +16,7 @@ namespace FritzNotifier
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SimpleNotificationForm());
+            Application.Run(new NotificationForm());
         }
     }
 }

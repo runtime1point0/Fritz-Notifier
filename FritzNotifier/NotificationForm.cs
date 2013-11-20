@@ -130,5 +130,19 @@ namespace FritzNotifier
         private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
         private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
         private List<Objects.Notification> notifications = new List<Objects.Notification>();
+        private SimpleNotificationForm childForm;
+
+        private void quickOverViewButton_Click(object sender, EventArgs e)
+        {
+
+            if (this.childForm == null) 
+            {
+                childForm = new SimpleNotificationForm(this);
+            }
+            this.Visible = false;
+            this.Enabled = false;
+            childForm.Enabled = true;
+            childForm.Visible = true;
+        }
     }
 }
