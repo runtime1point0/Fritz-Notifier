@@ -25,6 +25,19 @@ namespace FritzNotifier.Twitter
 
         public override void SetOptionValues(List<Objects.Option> initialValues)
         {
+            foreach (Objects.Option option in initialValues)
+            {
+                switch ((TwitterNotifier.TwitterOptionId)option.OptionId)
+                {
+                    case TwitterNotifier.TwitterOptionId.TweetCount:
+                        TweetCountCheckbox.Checked = option.Active;
+                        TweetCountMinutesNumericUpDown.Value = option.Numerics[0];
+                        break;
+                    case TwitterNotifier.TwitterOptionId.DirectMessage:
+                        ReadDirectMessagecheckBox.Checked = option.Active;
+                        break;
+                }
+            }
         }
     }
 }

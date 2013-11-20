@@ -10,7 +10,7 @@ namespace FritzNotifier.Twitter
     // built in notifier for twitter
     class TwitterNotifier : Plugins.INotifier
     {
-        private enum TwitterOptionId
+        internal enum TwitterOptionId
         {
             TweetCount = 1,
             DirectMessage = 2,

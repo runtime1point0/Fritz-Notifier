@@ -31,7 +31,8 @@
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.notificationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.quickOverViewButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +50,8 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Controls.Add(this.quickOverViewButton);
+            this.tabPage1.Controls.Add(this.notificationTableLayoutPanel);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -68,17 +70,27 @@
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // notificationTableLayoutPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1064, 566);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.notificationTableLayoutPanel.ColumnCount = 1;
+            this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.notificationTableLayoutPanel.Location = new System.Drawing.Point(3, 3);
+            this.notificationTableLayoutPanel.Name = "notificationTableLayoutPanel";
+            this.notificationTableLayoutPanel.RowCount = 1;
+            this.notificationTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87F));
+            this.notificationTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 566);
+            this.notificationTableLayoutPanel.TabIndex = 0;
+            // 
+            // quickOverViewButton
+            // 
+            this.quickOverViewButton.Location = new System.Drawing.Point(954, 6);
+            this.quickOverViewButton.Name = "quickOverViewButton";
+            this.quickOverViewButton.Size = new System.Drawing.Size(108, 23);
+            this.quickOverViewButton.TabIndex = 1;
+            this.quickOverViewButton.Text = "Quick Overview";
+            this.quickOverViewButton.UseVisualStyleBackColor = true;
             // 
             // NotificationForm
             // 
@@ -100,7 +112,8 @@
         private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel notificationTableLayoutPanel;
+        private System.Windows.Forms.Button quickOverViewButton;
     }
 }
 
