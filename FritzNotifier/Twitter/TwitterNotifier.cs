@@ -96,12 +96,25 @@ namespace FritzNotifier.Twitter
 
                     try
                     {
+                        DateTime currentDate = DateTime.Now;
                         foreach (Objects.Option option in options/*.Where(x => x.Active)*/)
                         {
                             switch ((TwitterOptionId)option.OptionId)
                             {
                                 case TwitterOptionId.TweetCount:
-                                    //System.Windows.Forms.MessageBox.Show("Looking for Tweet Count");
+                                    // if enough time has passed since we last accessed this
+                                    if ((currentDate - option.LastAccessed).TotalMinutes > option.Numerics[0])
+                                    {
+                                    int tweetCount =
+                                        (from tweet in ctx.Status
+                                         where tweet.Type == StatusType.Home &&
+                                         tweet.CreatedAt > option.LastAccessed
+                                         select tweet).Count();
+
+                                        var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", null, currentDate);
+                                        option.LastAccessed = currentDate;
+                                        notifications.Add(newTweetCountNotification);
+                                    }
                                     break;
                                 case TwitterOptionId.DirectMessage:
                                     var directMsgs =
@@ -112,8 +125,9 @@ namespace FritzNotifier.Twitter
                                     foreach (var directMsg in directMsgs)
                                     {
                                         // handle appropriately
-                                        var newNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, null, DateTime.Now);
-                                        notifications.Add(newNotification);
+                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, null, currentDate);
+                                        notifications.Add(newDirectMessageNotification);
+                                        option.LastAccessed = currentDate;
                                     }
 
                                     break;
