@@ -115,7 +115,7 @@ namespace FritzNotifier
             }
         }
 
-        private void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
+        internal void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
         {
             if (clearPrevious)
             {
@@ -259,6 +259,7 @@ namespace FritzNotifier
 
             this.Visible = false;
             this.Enabled = false;
+            childForm.update();
             childForm.Enabled = true;
             childForm.Visible = true;
             //childForm.ShowDialog(this);

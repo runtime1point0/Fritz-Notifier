@@ -127,6 +127,7 @@ namespace FritzNotifier
             //this.Hide();
             this.Visible = false;
             this.Enabled = false;
+            this.parentForm.PushNotifications(this.notifications, true);
             this.parentForm.Visible = true;
             this.parentForm.Enabled = true;
         }
