@@ -127,6 +127,7 @@ namespace FritzNotifier
             if (clearPrevious)
             {
                 notificationTableLayoutPanel.Controls.Clear();
+                notificationTableLayoutPanel.RowStyles.Clear();
             }
             foreach (var newNotification in newNotifications)
             {

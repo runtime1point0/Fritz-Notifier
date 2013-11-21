@@ -54,7 +54,7 @@ namespace FritzNotifier.Facebook
         {
             var newNotificationOption = initialOptions.Single(x => x.OptionId == (int)FacebookNotifier.FacebookOptionId.NewNotification);
             newNotificationOption.Active = ReactToNotificationsCheckBox.Checked;
-            switch (gestureComboBox.SelectedItem.ToString())
+            switch ((gestureComboBox.SelectedItem ?? "Neutral").ToString())
             {
                 case "Happy":
                     newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Happy;
@@ -64,6 +64,9 @@ namespace FritzNotifier.Facebook
                     break;
                 case "Awkward":
                     newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Awkward;
+                    break;
+                case "Neutral":
+                    newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Neutral;
                     break;
             }
         }

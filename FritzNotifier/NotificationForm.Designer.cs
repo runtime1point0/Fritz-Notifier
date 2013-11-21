@@ -34,10 +34,10 @@
             this.quickOverViewButton = new System.Windows.Forms.Button();
             this.notificationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.configureNotificationsTabPage = new System.Windows.Forms.TabPage();
+            this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.ConfigureForLabel = new System.Windows.Forms.Label();
             this.notificationToConfigureComboBox = new System.Windows.Forms.ComboBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.mainTabControl.SuspendLayout();
             this.notificationsTabPage.SuspendLayout();
             this.configureNotificationsTabPage.SuspendLayout();
@@ -79,6 +79,7 @@
             // 
             // notificationTableLayoutPanel
             // 
+            this.notificationTableLayoutPanel.AutoScroll = true;
             this.notificationTableLayoutPanel.ColumnCount = 1;
             this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -103,6 +104,13 @@
             this.configureNotificationsTabPage.Text = "Configure Notifications";
             this.configureNotificationsTabPage.UseVisualStyleBackColor = true;
             // 
+            // editingOptionsControlHolderPanel
+            // 
+            this.editingOptionsControlHolderPanel.Location = new System.Drawing.Point(11, 42);
+            this.editingOptionsControlHolderPanel.Name = "editingOptionsControlHolderPanel";
+            this.editingOptionsControlHolderPanel.Size = new System.Drawing.Size(648, 420);
+            this.editingOptionsControlHolderPanel.TabIndex = 2;
+            // 
             // ConfigureForLabel
             // 
             this.ConfigureForLabel.AutoSize = true;
@@ -124,13 +132,6 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // editingOptionsControlHolderPanel
-            // 
-            this.editingOptionsControlHolderPanel.Location = new System.Drawing.Point(11, 42);
-            this.editingOptionsControlHolderPanel.Name = "editingOptionsControlHolderPanel";
-            this.editingOptionsControlHolderPanel.Size = new System.Drawing.Size(648, 420);
-            this.editingOptionsControlHolderPanel.TabIndex = 2;
             // 
             // NotificationForm
             // 
