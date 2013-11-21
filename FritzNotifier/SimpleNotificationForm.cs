@@ -60,7 +60,7 @@ namespace FritzNotifier
             for (int i = 0; i < notificationCategoryBox.Items.Count; i++)
             {
                 // Remove the (#) count from the end of the line at the index in the listbox.
-                notificationCategoryBox.Items[i] = notificationCategoryBox.Items[i].ToString().Substring(0, notificationCategoryBox.Items[i].ToString().Length - 4);
+                notificationCategoryBox.Items[i] = notificationCategoryBox.Items[i].ToString().Substring(0, notificationCategoryBox.Items[i].ToString().IndexOf("("));
                 int count = 0;
 
                 foreach (Objects.Notification notificationToCheckNameAgainst in this.notifications)
@@ -73,7 +73,7 @@ namespace FritzNotifier
 
                 }
 
-                notificationCategoryBox.Items[i] += " (" + count.ToString() + ")";
+                notificationCategoryBox.Items[i] += "(" + count.ToString() + ")";
                 Console.WriteLine(count);
 
             }
