@@ -38,6 +38,18 @@ namespace FritzNotifier.Twitter
                         break;
                 }
             }
+
+            base.SetOptionValues(initialValues);
+        }
+
+        protected override void ApplyChanges(ref List<Objects.Option> initialOptions)
+        {
+            var tweetCountOption = initialOptions.Single(x => x.OptionId == (int)TwitterNotifier.TwitterOptionId.TweetCount);
+            tweetCountOption.Active = TweetCountCheckbox.Checked;
+            tweetCountOption.Numerics[0] = Convert.ToInt32(TweetCountMinutesNumericUpDown.Value);
+
+            var directMessageOption = initialOptions.Single(x => x.OptionId == (int)TwitterNotifier.TwitterOptionId.DirectMessage);
+            directMessageOption.Active = ReadDirectMessagecheckBox.Checked;
         }
     }
 }

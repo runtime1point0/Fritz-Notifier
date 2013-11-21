@@ -42,6 +42,7 @@ namespace FritzNotifier.Plugins
         {
             // change initialOptions based off of screen
             ApplyChanges(ref options);
+            OnChanged(EventArgs.Empty);
         }
 
         // Invoke the OptionsChanged event; called whenever option changes are saved

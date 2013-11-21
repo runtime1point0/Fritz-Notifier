@@ -119,7 +119,7 @@ namespace FritzNotifier.Twitter
                                 case TwitterOptionId.DirectMessage:
                                     var directMsgs =
                                         (from dm in ctx.DirectMessage
-                                         where dm.Type == DirectMessageType.Show &&
+                                         where dm.Type == DirectMessageType.SentTo &&
                                          dm.CreatedAt > option.LastAccessed
                                          select dm).ToList();
                                     foreach (var directMsg in directMsgs)

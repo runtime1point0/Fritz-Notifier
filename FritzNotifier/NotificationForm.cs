@@ -58,8 +58,60 @@ namespace FritzNotifier
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
+            ActivateTimer();
+
             // temporary
-            TestFirst();
+            //TestFirst();
+        }
+
+        private void ActivateTimer()
+        {
+            if (plugins != null)
+            {
+                // if any plugin options are active across any of the pluginoptions associated with any application
+                if (pluginOptions.Any(pluginNamePluginOptionsPair => pluginNamePluginOptionsPair.Value.Any(option => option.Active)))
+                {
+                    if (checkNotifications == null)
+                    {
+                        checkNotifications = new Timer();
+                        checkNotifications.Interval = 1000 * 60; // 60 seconds
+                        checkNotifications.Tick += checkNotifications_Tick;
+                        checkNotifications.Start();
+                    }
+                }
+                else
+                {
+                    if (checkNotifications != null)
+                    {
+                        checkNotifications.Stop();
+                        checkNotifications.Tick -= checkNotifications_Tick;
+                        checkNotifications.Dispose();
+                        checkNotifications = null;
+                    }
+                }
+            }
+            else
+            {
+                if (checkNotifications != null)
+                {
+                    checkNotifications.Stop();
+                    checkNotifications.Tick -= checkNotifications_Tick;
+                    checkNotifications.Dispose();
+                    checkNotifications = null;
+                }
+            }
+
+        }
+
+        void checkNotifications_Tick(object sender, EventArgs e)
+        {
+            foreach (Plugins.INotifier plugin in plugins)
+            {
+                var newNotifications = plugin.TestForNotifications(pluginOptions[plugin.NotificationApplication]);
+                notifications.AddRange(newNotifications);
+                // update simple view count
+                // send new ones to main screen to update list
+            }
         }
 
         private void TestFirst()
@@ -77,7 +129,7 @@ namespace FritzNotifier
 
 
             // add any predefined ones here
-            //plugins.Add(new Twitter.TwitterNotifier());
+            plugins.Add(new Twitter.TwitterNotifier());
             plugins.Add(new Facebook.FacebookNotifier());
 
             if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"plugins\"))
@@ -108,7 +160,7 @@ namespace FritzNotifier
 
             foreach (Plugins.INotifier plugin in plugins)
             {
-                /*
+                /* example of settings file that would store the selected options so they can be reloaded the next time the application loads
                  * <Settings>
                  *  <Setting Application="Twitter">
                  *      <Option Id="1" Active="true"><Numerics><Numeric>20</Numeric></Numerics></Option>
@@ -166,6 +218,7 @@ namespace FritzNotifier
         private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
         private List<Objects.Notification> notifications = new List<Objects.Notification>();
         private SimpleNotificationForm childForm;
+        private Timer checkNotifications;
 
         private void quickOverViewButton_Click(object sender, EventArgs e)
         {
@@ -189,8 +242,9 @@ namespace FritzNotifier
                 {
                     editingOptionsControlHolderPanel.Controls[i].Dispose();
                 }
-                editingOptionsControlHolderPanel.Controls.Add(
-                    plugins.Single(x => x.NotificationApplication == notificationToConfigureComboBox.SelectedValue.ToString()).CreateOptionsControl(pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()]));
+                var optionsControl = plugins.Single(x => x.NotificationApplication == notificationToConfigureComboBox.SelectedValue.ToString()).CreateOptionsControl(pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()]);
+                optionsControl.OptionsChanged += optionsControl_OptionsChanged;
+                editingOptionsControlHolderPanel.Controls.Add(optionsControl);
             }
             else
             {
@@ -200,6 +254,15 @@ namespace FritzNotifier
                 }
                 editingOptionsControlHolderPanel.Controls.Add(new Plugins.OptionsControl());
             }
+        }
+
+        void optionsControl_OptionsChanged(object sender, EventArgs e)
+        {
+            var optionsControl = sender as Plugins.OptionsControl;
+
+            pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()] = optionsControl.Options;
+
+            ActivateTimer();
         }
     }
 }
