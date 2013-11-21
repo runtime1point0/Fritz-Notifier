@@ -51,7 +51,29 @@ namespace FritzNotifier
 
         public void update()
         {
-            Console.WriteLine(notifications);
+
+            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
+            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
+            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
+            notifications.Add(new Objects.Notification("Facebook", 5, "", "", DateTime.Now));
+
+            for (int i = 0; i < notificationCategoryBox.Items.Count; i++)
+            {
+                int count = 0;
+
+                foreach (Objects.Notification notificationToCheckNameAgainst in this.notifications)
+                {
+
+                    if (notificationCategoryBox.Items[i] == notificationToCheckNameAgainst.ApplicationName)
+                    {
+                        count += 1;
+                    }
+
+                }
+
+                Console.WriteLine(count);
+
+            }
         }
 
         private Plugins.INotifier twitterPlugin = new Twitter.TwitterNotifier();
