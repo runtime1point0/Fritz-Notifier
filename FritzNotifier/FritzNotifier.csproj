@@ -87,6 +87,12 @@
     <Compile Include="SimpleNotificationForm.Designer.cs">
       <DependentUpon>SimpleNotificationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimedFritzFace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TimedFritzFace.Designer.cs">
+      <DependentUpon>TimedFritzFace.cs</DependentUpon>
+    </Compile>
     <Compile Include="Twitter\TwitterOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     <EmbeddedResource Include="SimpleNotificationForm.resx">
       <DependentUpon>SimpleNotificationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TimedFritzFace.resx">
+      <DependentUpon>TimedFritzFace.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Twitter\TwitterOptionsControl.resx">
       <DependentUpon>TwitterOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,7 +138,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="awkwardFritz.png" />
+    <EmbeddedResource Include="happyFritz.png" />
+    <EmbeddedResource Include="neutralFritz.png" />
+    <EmbeddedResource Include="surprisedFritz.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

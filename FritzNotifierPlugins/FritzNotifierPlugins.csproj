@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gesture.cs" />
     <Compile Include="INotifier.cs" />
     <Compile Include="OptionsControl.cs">
       <SubType>UserControl</SubType>

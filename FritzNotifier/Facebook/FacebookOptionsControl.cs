@@ -30,16 +30,42 @@ namespace FritzNotifier.Facebook
                 switch ((FacebookNotifier.FacebookOptionId)option.OptionId)
                 {
                     case FacebookNotifier.FacebookOptionId.NewNotification:
-                        ReadNotificationsCheckBox.Checked = option.Active;
+                        ReactToNotificationsCheckBox.Checked = option.Active;
+                        switch ((Plugins.Gesture)option.Gestures[0])
+                        {
+                            case Plugins.Gesture.Happy:
+                                gestureComboBox.SelectedValue = "Happy";
+                                break;
+                            case Plugins.Gesture.Surprised:
+                                gestureComboBox.SelectedValue = "Surprised";
+                                break;
+                            case Plugins.Gesture.Awkward:
+                                gestureComboBox.SelectedValue = "Awkward";
+                                break;
+                        }
                         break;
                 }
             }
+
+            base.SetOptionValues(initialValues);
         }
 
         protected override void ApplyChanges(ref List<Objects.Option> initialOptions)
         {
             var newNotificationOption = initialOptions.Single(x => x.OptionId == (int)FacebookNotifier.FacebookOptionId.NewNotification);
-            newNotificationOption.Active = ReadNotificationsCheckBox.Checked;
+            newNotificationOption.Active = ReactToNotificationsCheckBox.Checked;
+            switch (gestureComboBox.SelectedItem.ToString())
+            {
+                case "Happy":
+                    newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Happy;
+                    break;
+                case "Surprised":
+                    newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Surprised;
+                    break;
+                case "Awkward":
+                    newNotificationOption.Gestures[0] = (int)Plugins.Gesture.Awkward;
+                    break;
+            }
         }
     }
 }

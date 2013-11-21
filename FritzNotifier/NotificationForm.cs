@@ -76,7 +76,7 @@ namespace FritzNotifier
                         checkNotifications = new Timer();
                         checkNotifications.Interval = 1000 * 60; // 60 seconds
                         checkNotifications.Tick += checkNotifications_Tick;
-                        checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
+                        //checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
                         checkNotifications.Start();
                     }
                 }
@@ -110,8 +110,15 @@ namespace FritzNotifier
             {
                 var newNotifications = plugin.TestForNotifications(pluginOptions[plugin.NotificationApplication]);
                 notifications.AddRange(newNotifications);
-                // update simple view count
                 PushNotifications(newNotifications, false);
+
+                foreach (var newNotification in newNotifications)
+                {
+                    if (!string.IsNullOrEmpty(newNotification.Speech) || newNotification.AssociatedGesture != 0)
+                    {
+                        // display gesture or say speech
+                    }
+                }
             }
         }
 
