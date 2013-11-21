@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ReadMessageCheckBox = new System.Windows.Forms.CheckBox();
+            this.ReadNotificationsCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ApplyChangesButton
@@ -39,24 +39,24 @@
             // 
             this.CancelButton.Visible = true;
             // 
-            // ReadMessageCheckBox
+            // ReadNotificationsCheckBox
             // 
-            this.ReadMessageCheckBox.AutoSize = true;
-            this.ReadMessageCheckBox.Location = new System.Drawing.Point(16, 41);
-            this.ReadMessageCheckBox.Name = "ReadMessageCheckBox";
-            this.ReadMessageCheckBox.Size = new System.Drawing.Size(154, 17);
-            this.ReadMessageCheckBox.TabIndex = 3;
-            this.ReadMessageCheckBox.Text = "Read new direct messages";
-            this.ReadMessageCheckBox.UseVisualStyleBackColor = true;
+            this.ReadNotificationsCheckBox.AutoSize = true;
+            this.ReadNotificationsCheckBox.Location = new System.Drawing.Point(16, 41);
+            this.ReadNotificationsCheckBox.Name = "ReadNotificationsCheckBox";
+            this.ReadNotificationsCheckBox.Size = new System.Drawing.Size(134, 17);
+            this.ReadNotificationsCheckBox.TabIndex = 3;
+            this.ReadNotificationsCheckBox.Text = "Read new notifications";
+            this.ReadNotificationsCheckBox.UseVisualStyleBackColor = true;
             // 
             // FacebookOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ReadMessageCheckBox);
+            this.Controls.Add(this.ReadNotificationsCheckBox);
             this.Name = "FacebookOptionsControl";
             this.Size = new System.Drawing.Size(394, 124);
-            this.Controls.SetChildIndex(this.ReadMessageCheckBox, 0);
+            this.Controls.SetChildIndex(this.ReadNotificationsCheckBox, 0);
             this.Controls.SetChildIndex(this.ApplyChangesButton, 0);
             this.Controls.SetChildIndex(this.CancelButton, 0);
             this.ResumeLayout(false);
@@ -66,6 +66,6 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox ReadMessageCheckBox;
+        private System.Windows.Forms.CheckBox ReadNotificationsCheckBox;
     }
 }

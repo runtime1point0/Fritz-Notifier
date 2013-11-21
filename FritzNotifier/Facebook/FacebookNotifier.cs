@@ -12,7 +12,7 @@ namespace FritzNotifier.Facebook
     {
         internal enum FacebookOptionId
         {
-            NewMessage = 1,
+            NewNotification = 1,
         }
 
         public string NotificationApplication
@@ -32,7 +32,7 @@ namespace FritzNotifier.Facebook
 
         public List<Objects.Option> GetAllAvailableOptions()
         {
-            var newMessageOption = new Objects.Option((int)FacebookOptionId.NewMessage, null, null); // id 2 is the direct message notification option for Twitter
+            var newMessageOption = new Objects.Option((int)FacebookOptionId.NewNotification, null, null); // id 2 is the direct message notification option for Twitter
 
             var options = new List<Objects.Option>(1);
             options.Add(newMessageOption);
@@ -40,57 +40,60 @@ namespace FritzNotifier.Facebook
             return options;
         }
 
+        FacebookClient appClient = null;
+        FacebookClient userClient = null;
+        string userId = null;
+
         public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
         {
             var notifications = new List<Objects.Notification>(options.Count);
 
-            //if (options.Count(x => x.Active) > 0)
+            if (options.Count(x => x.Active) > 0)
             {
-                // TODO: get authorization from Facebook
-
-
+                if (appClient == null)
                 {
+                    var appAccessTokenLong = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppIdLong");
+                    var appAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppId");
+                    appClient = new FacebookClient(appAccessTokenLong);
 
-                    try
+                    dynamic userResult = appClient.Post(string.Format("{0}/accounts/test-users", appAccessToken), new { installed = true, name = "Fritz Test", permissions = "manage_notifications" });
+                    userClient = new FacebookClient((string)(userResult["access_token"]));
+                    userId = userResult["id"];
+                }
+
+                try
+                {
+                    DateTime currentDate = DateTime.Now;
+                    foreach (Objects.Option option in options.Where(x => x.Active))
                     {
-                        DateTime currentDate = DateTime.Now;
-                        foreach (Objects.Option option in options/*.Where(x => x.Active)*/)
+                        switch ((FacebookOptionId)option.OptionId)
                         {
-                            switch ((FacebookOptionId)option.OptionId)
-                            {
-                                case FacebookOptionId.NewMessage:
-                                    var appAccessTokenLong = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppIdLong");
-                                    var appAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppId");
-                                    var client = new FacebookClient(appAccessTokenLong);
+                            case FacebookOptionId.NewNotification:
 
-                                    dynamic userResult = client.Post(string.Format("{0}/accounts/test-users", appAccessToken), new { installed = true, name = "Fritz Test", permissions = "manage_notifications" });
+                                DateTime ePoch = new DateTime(1970, 1, 1, 0, 0, 0);
+                                //var unixTimestampLastAccessed = System.Convert.ToInt64((option.LastAccessed - ePoch).TotalSeconds);
+                                var unixTimestampLastAccessed = System.Convert.ToInt64((DateTime.Now.AddDays(-10) - ePoch).TotalSeconds);
 
-                                    DateTime ePoch = new DateTime(1970, 1, 1, 0, 0, 0);
-                                    //var unixTimestampLastAccessed = System.Convert.ToInt64((option.LastAccessed - ePoch).TotalSeconds);
-                                    var unixTimestampLastAccessed = System.Convert.ToInt64((DateTime.Now.AddDays(-10) - ePoch).TotalSeconds);
+                                //dynamic result = userClient.Get("fql", new { q = "SELECT author_id, body, source FROM message" });
+                                dynamic result = userClient.Get("fql", new { q = "SELECT title_text, updated_time FROM notification WHERE recipient_id = " + userId });
 
-                                    var userClient = new FacebookClient((string)(userResult["access_token"]));
-                                    //dynamic result = userClient.Get("fql", new { q = "SELECT author_id, body, source FROM message" });
-                                    dynamic result = userClient.Get("fql", new { q = "SELECT title_text, updated_time FROM notification WHERE recipient_id = " + userResult["id"] });
-
-                                    if (result["data"].Count > 0)
+                                if (result["data"].Count > 0)
+                                {
+                                    if (result["data"]["updated_time"] > unixTimestampLastAccessed.ToString())
                                     {
-                                        if (result["data"]["updated_time"] > unixTimestampLastAccessed.ToString())
-                                        {
 
-                                            var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "New Facebook notification.", result["data"]["title_text"], currentDate);
-                                            option.LastAccessed = currentDate;
-                                            notifications.Add(newMessageNotification);
-                                        }
+                                        var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "New Facebook notification.", result["data"]["title_text"], currentDate);
+                                        option.LastAccessed = currentDate;
+                                        notifications.Add(newMessageNotification);
                                     }
-                                    break;
-                            }
+                                }
+                                break;
                         }
                     }
-                    catch (System.Net.WebException wex)
-                    {
-                        Console.WriteLine("Facebook did not recognize the credentials. Response from Facebook: " + wex.Message);
-                    }
+                }
+                catch (System.Net.WebException wex)
+                {
+                    Console.WriteLine("Facebook did not recognize the credentials. Response from Facebook: " + wex.Message);
                 }
             }
 
