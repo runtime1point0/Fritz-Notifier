@@ -111,6 +111,10 @@ namespace FritzNotifier
                 var newNotifications = plugin.TestForNotifications(pluginOptions[plugin.NotificationApplication]);
                 notifications.AddRange(newNotifications);
                 PushNotifications(newNotifications, false);
+		if (childForm != null)
+		{
+			childForm.update();
+		}
 
                 foreach (var newNotification in newNotifications)
                 {
@@ -148,8 +152,12 @@ namespace FritzNotifier
 
         void notificationControl_DismissNotification(object sender, NotificationControl.DismissNotificationEventArgs e)
         {
-            notifications.Remove(e.notification);
-            PushNotifications(notifications, true);
+		notifications.Remove(e.notification);
+            	PushNotifications(notifications, true);
+		if (childForm != null)
+		{
+			childForm.update();
+		}
         }
 
         private void TestFirst()
