@@ -22,9 +22,9 @@ namespace FritzNotifier
             twitterOptions = twitterPlugin.GetAllAvailableOptions();
 
             notificationCategoryBox.Items.Clear();
-            notificationCategoryBox.Items.Add(twitterPlugin.NotificationApplication);
+            notificationCategoryBox.Items.Add(twitterPlugin.NotificationApplication + " (0)");
 
-            notificationCategoryBox.Items.Add("Facebook");
+            notificationCategoryBox.Items.Add("Facebook (0)");
 
             this.parentForm = parent;
             this.notifications = parentNotifications;
@@ -59,18 +59,21 @@ namespace FritzNotifier
 
             for (int i = 0; i < notificationCategoryBox.Items.Count; i++)
             {
+                // Remove the (#) count from the end of the line at the index in the listbox.
+                notificationCategoryBox.Items[i] = notificationCategoryBox.Items[i].ToString().Substring(0, notificationCategoryBox.Items[i].ToString().Length - 4);
                 int count = 0;
 
                 foreach (Objects.Notification notificationToCheckNameAgainst in this.notifications)
                 {
 
-                    if (notificationCategoryBox.Items[i] == notificationToCheckNameAgainst.ApplicationName)
+                    if (notificationCategoryBox.Items[i].ToString().Trim() == notificationToCheckNameAgainst.ApplicationName.Trim())
                     {
                         count += 1;
                     }
 
                 }
 
+                notificationCategoryBox.Items[i] += " (" + count.ToString() + ")";
                 Console.WriteLine(count);
 
             }
