@@ -16,7 +16,7 @@ namespace FritzNotifier
 
         NotificationForm parentForm;
 
-        public SimpleNotificationForm(NotificationForm parent)
+        public SimpleNotificationForm(NotificationForm parent, List<Objects.Notification> parentNotifications)
         {
             InitializeComponent();
             twitterOptions = twitterPlugin.GetAllAvailableOptions();
@@ -27,11 +27,12 @@ namespace FritzNotifier
             notificationCategoryBox.Items.Add("Facebook");
 
             this.parentForm = parent;
+            this.notifications = parentNotifications;
         }
 
         private void dismissButton_Click(object sender, EventArgs e)
         {
-            
+            update();   
         }
 
         private void goToSiteButton_Click(object sender, EventArgs e)
@@ -46,6 +47,11 @@ namespace FritzNotifier
             {
                 Process.Start("http://" + "facebook" + ".com");
             }
+        }
+
+        public void update()
+        {
+            Console.WriteLine(notifications);
         }
 
         private Plugins.INotifier twitterPlugin = new Twitter.TwitterNotifier();

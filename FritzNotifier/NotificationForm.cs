@@ -171,7 +171,7 @@ namespace FritzNotifier
         {
             if (this.childForm == null)
             {
-                childForm = new SimpleNotificationForm(this);
+                childForm = new SimpleNotificationForm(this, this.notifications);
             }
 
             this.Visible = false;
