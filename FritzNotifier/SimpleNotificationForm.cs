@@ -28,34 +28,68 @@ namespace FritzNotifier
 
             this.parentForm = parent;
             this.notifications = parentNotifications;
+
+            update();
+
         }
 
         private void dismissButton_Click(object sender, EventArgs e)
         {
-            update();   
+
+            try
+            {
+
+                string applicationToDismiss = notificationCategoryBox.SelectedItem.ToString().Substring(0, notificationCategoryBox.SelectedItem.ToString().IndexOf(" ("));
+
+                List<Objects.Notification> notificationsToRemove = new List<Objects.Notification>();
+
+                foreach (Objects.Notification notificationToCheck in this.notifications)
+                {
+                    if (notificationToCheck.ApplicationName == applicationToDismiss)
+                    {
+                        notificationsToRemove.Add(notificationToCheck);
+                    }
+                }
+
+                foreach (Objects.Notification notificationToRemove in notificationsToRemove)
+                {
+                    this.notifications.Remove(notificationToRemove);
+                }
+
+                update();
+            }
+            catch (NullReferenceException exception)
+            {
+                // Ignore the call
+            }
+
         }
 
         private void goToSiteButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(sender);
-            // if implement plugin collection, search for appropriate one here
-            if (notificationCategoryBox.SelectedValue.ToString() == twitterPlugin.NotificationApplication)
+
+            try
             {
-                Process.Start(twitterPlugin.WebsiteOrProgramAddress);
+                // if implement plugin collection, search for appropriate one here
+                string item = notificationCategoryBox.SelectedItem.ToString().Substring(0, notificationCategoryBox.SelectedItem.ToString().IndexOf(" ("));
+
+                if (item == twitterPlugin.NotificationApplication)
+                {
+                    Process.Start(twitterPlugin.WebsiteOrProgramAddress);
+                }
+                else
+                {
+                    Process.Start("http://" + "facebook" + ".com");
+                }
             }
-            else
+            catch (NullReferenceException excep)
             {
-                Process.Start("http://" + "facebook" + ".com");
+                // Ignore the event
             }
         }
 
         public void update()
         {
-
-            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
-            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
-            notifications.Add(new Objects.Notification("Twitter", 5, "", "", DateTime.Now));
-            notifications.Add(new Objects.Notification("Facebook", 5, "", "", DateTime.Now));
 
             for (int i = 0; i < notificationCategoryBox.Items.Count; i++)
             {
