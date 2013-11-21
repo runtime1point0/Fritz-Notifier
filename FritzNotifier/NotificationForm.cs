@@ -76,6 +76,7 @@ namespace FritzNotifier
                         checkNotifications = new Timer();
                         checkNotifications.Interval = 1000 * 60; // 60 seconds
                         checkNotifications.Tick += checkNotifications_Tick;
+                        checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
                         checkNotifications.Start();
                     }
                 }
@@ -110,8 +111,37 @@ namespace FritzNotifier
                 var newNotifications = plugin.TestForNotifications(pluginOptions[plugin.NotificationApplication]);
                 notifications.AddRange(newNotifications);
                 // update simple view count
-                // send new ones to main screen to update list
+                PushNotifications(newNotifications, false);
             }
+        }
+
+        private void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
+        {
+            if (clearPrevious)
+            {
+                notificationTableLayoutPanel.Controls.Clear();
+            }
+            foreach (var newNotification in newNotifications)
+            {
+                notificationTableLayoutPanel.RowStyles.Insert(0, new RowStyle(SizeType.AutoSize));
+                var notificationControl = new NotificationControl();
+                notificationControl.SetupScreen(newNotification);
+                notificationControl.DismissNotification += notificationControl_DismissNotification;
+                notificationControl.ReplyNotification += notificationControl_ReplyNotification;
+                notificationTableLayoutPanel.Controls.Add(notificationControl);
+                notificationTableLayoutPanel.SetCellPosition(notificationControl, new TableLayoutPanelCellPosition(0, 0));
+            }
+        }
+
+        void notificationControl_ReplyNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        void notificationControl_DismissNotification(object sender, NotificationControl.DismissNotificationEventArgs e)
+        {
+            notifications.Remove(e.notification);
+            PushNotifications(notifications, true);
         }
 
         private void TestFirst()

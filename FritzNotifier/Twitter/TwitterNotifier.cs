@@ -93,11 +93,17 @@ namespace FritzNotifier.Twitter
                     //    Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
                     //}
 
+                    var testMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "Test sender" + " sent message " + "message 1", "New message from " + "Test sender", DateTime.Now);
+                    var testSimpleMessage = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "simple notification", null, DateTime.Now);
+
+                    notifications.Add(testMessageNotification);
+                    notifications.Add(testSimpleMessage);
+                    return notifications;
 
                     try
                     {
                         DateTime currentDate = DateTime.Now;
-                        foreach (Objects.Option option in options/*.Where(x => x.Active)*/)
+                        foreach (Objects.Option option in options.Where(x => x.Active))
                         {
                             switch ((TwitterOptionId)option.OptionId)
                             {
