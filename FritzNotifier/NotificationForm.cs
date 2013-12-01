@@ -111,10 +111,10 @@ namespace FritzNotifier
                 var newNotifications = plugin.TestForNotifications(pluginOptions[plugin.NotificationApplication]);
                 notifications.AddRange(newNotifications);
                 PushNotifications(newNotifications, false);
-		if (childForm != null)
-		{
-			childForm.update();
-		}
+                if (childForm != null)
+                {
+                    childForm.update();
+                }
 
                 foreach (var newNotification in newNotifications)
                 {
@@ -128,6 +128,8 @@ namespace FritzNotifier
 
         internal void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
         {
+            bool performLayout = clearPrevious;
+            notificationTableLayoutPanel.SuspendLayout();
             if (clearPrevious)
             {
                 notificationTableLayoutPanel.Controls.Clear();
@@ -142,7 +144,10 @@ namespace FritzNotifier
                 notificationControl.ReplyNotification += notificationControl_ReplyNotification;
                 notificationTableLayoutPanel.Controls.Add(notificationControl);
                 notificationTableLayoutPanel.SetCellPosition(notificationControl, new TableLayoutPanelCellPosition(0, 0));
+                performLayout = true;
             }
+
+            notificationTableLayoutPanel.ResumeLayout();
         }
 
         void notificationControl_ReplyNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
@@ -152,12 +157,12 @@ namespace FritzNotifier
 
         void notificationControl_DismissNotification(object sender, NotificationControl.DismissNotificationEventArgs e)
         {
-		notifications.Remove(e.notification);
-            	PushNotifications(notifications, true);
-		if (childForm != null)
-		{
-			childForm.update();
-		}
+            notifications.Remove(e.notification);
+            PushNotifications(notifications, true);
+            if (childForm != null)
+            {
+                childForm.update();
+            }
         }
 
         private void TestFirst()
@@ -199,7 +204,7 @@ namespace FritzNotifier
         {
             System.Xml.Linq.XDocument doc = null;
 
-            if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"\settings.xml"))
+            if (System.IO.File.Exists(System.Windows.Forms.Application.StartupPath + @"\settings.xml"))
             {
                 doc = System.Xml.Linq.XDocument.Load(System.Windows.Forms.Application.StartupPath + @"\settings.xml");
             }
@@ -219,7 +224,7 @@ namespace FritzNotifier
                 System.Xml.Linq.XElement settingElement = null;
                 if (doc != null)
                 {
-                    settingElement = (from item in doc.Descendants("Setting") where item.Attributes("Application").FirstOrDefault().ToString() == plugin.NotificationApplication select item).FirstOrDefault();
+                    settingElement = (from item in doc.Descendants("Setting") where item.Attributes("Application").FirstOrDefault().Value == plugin.NotificationApplication select item).FirstOrDefault();
                 }
                 SetupPluginOptions(plugin, settingElement);
             }
@@ -231,15 +236,29 @@ namespace FritzNotifier
 
             if (settingElement != null)
             {
-                foreach (var optionElement in (from configuredOption in settingElement.Descendants("Options") select configuredOption))
+                foreach (var optionElement in (from configuredOption in settingElement.Descendants("Option") select configuredOption))
                 {
                     var numericsElement = optionElement.Element("Numerics");
                     var numerics = new List<int>();
-                    // TODO: loop through and set up all numerics
+
+                    if (numericsElement != null)
+                    {
+                        foreach (var numericElement in (from numeric in numericsElement.Descendants("Numeric") select numeric))
+                        {
+                            numerics.Add(Convert.ToInt32(numericElement.Value));
+                        }
+                    }
 
                     var gesturesElement = optionElement.Element("Gestures");
                     var gestures = new List<int>();
-                    // TODO: loop through and set up all gestures
+
+                    if (gesturesElement != null)
+                    {
+                        foreach (var gestureElement in (from gesture in gesturesElement.Descendants("Gesture") select gesture))
+                        {
+                            gestures.Add(Convert.ToInt32(gestureElement.Value));
+                        }
+                    }
 
                     var active = Convert.ToBoolean(optionElement.Attribute("Active").Value);
 
@@ -260,6 +279,74 @@ namespace FritzNotifier
             pluginOptions[plugin.NotificationApplication] = options;
         }
 
+        private void WritePluginOptions()
+        {
+            System.Xml.Linq.XElement settingsElement = new System.Xml.Linq.XElement("Settings");
+
+            foreach (Plugins.INotifier plugin in plugins)
+            {
+                /* example of settings file that would store the selected options so they can be reloaded the next time the application loads
+                 * <Settings>
+                 *  <Setting Application="Twitter">
+                 *      <Option Id="1" Active="true"><Numerics><Numeric>20</Numeric></Numerics></Option>
+                 *      <Option Id="3" Active="false"><Gestures><Gesture>1</Gesture></Gestures></Option>
+                 *  </Setting>
+                 * </Settings>
+                 */
+
+                SavePluginOptions(plugin.NotificationApplication, pluginOptions[plugin.NotificationApplication], settingsElement);
+            }
+
+            settingsElement.Save(System.Windows.Forms.Application.StartupPath + @"\settings.xml");
+        }
+
+        private void SavePluginOptions(string application, List<Objects.Option> options, System.Xml.Linq.XElement settingsElement)
+        {
+            var settingElement = new System.Xml.Linq.XElement("Setting");
+            var applicationAttribute = new System.Xml.Linq.XAttribute("Application", application);
+
+            settingElement.Add(applicationAttribute);
+
+            foreach (var option in options)
+            {
+                var optionElement = new System.Xml.Linq.XElement("Option");
+                var optionIdAttr = new System.Xml.Linq.XAttribute("Id", option.OptionId);
+                var activeAttr = new System.Xml.Linq.XAttribute("Active", option.Active);
+
+                optionElement.Add(optionIdAttr, activeAttr);
+
+                if (option.Numerics != null && option.Numerics.Count > 0)
+                {
+                    var numericsElement = new System.Xml.Linq.XElement("Numerics");
+                    foreach (int numeric in option.Numerics)
+                    {
+                        var numericElement = new System.Xml.Linq.XElement("Numeric");
+                        numericElement.Add(new System.Xml.Linq.XText(numeric.ToString()));
+                        numericsElement.Add(numericElement);
+                    }
+
+                    optionElement.Add(numericsElement);
+                }
+
+                if (option.Gestures != null && option.Gestures.Count > 0)
+                {
+                    var gesturesElement = new System.Xml.Linq.XElement("Gestures");
+                    foreach (int gesture in option.Gestures)
+                    {
+                        var gestureElement = new System.Xml.Linq.XElement("Gesture");
+                        gestureElement.Add(new System.Xml.Linq.XText(gesture.ToString()));
+                        gesturesElement.Add(gestureElement);
+                    }
+
+                    optionElement.Add(gesturesElement);
+                }
+
+                settingElement.Add(optionElement);
+            }
+
+            settingsElement.Add(settingElement);
+        }
+
         private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
         private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
         private List<Objects.Notification> notifications = new List<Objects.Notification>();
@@ -270,7 +357,7 @@ namespace FritzNotifier
         {
             if (this.childForm == null)
             {
-                childForm = new SimpleNotificationForm(this, this.notifications);
+                childForm = new SimpleNotificationForm(this, this.plugins, this.notifications);
             }
 
             this.Visible = false;
@@ -310,6 +397,12 @@ namespace FritzNotifier
             pluginOptions[notificationToConfigureComboBox.SelectedValue.ToString()] = optionsControl.Options;
 
             ActivateTimer();
+        }
+
+        private void NotificationForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // save selected options for reload
+            WritePluginOptions();
         }
     }
 }
