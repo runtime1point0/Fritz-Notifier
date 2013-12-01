@@ -16,17 +16,12 @@ namespace FritzNotifier
 
         NotificationForm parentForm;
 
-        public SimpleNotificationForm(NotificationForm parent, List<Objects.Notification> parentNotifications)
+        public SimpleNotificationForm(NotificationForm parent, List<Plugins.INotifier> parentNotifiers, List<Objects.Notification> parentNotifications)
         {
             InitializeComponent();
-            twitterOptions = twitterPlugin.GetAllAvailableOptions();
-
-            notificationCategoryBox.Items.Clear();
-            notificationCategoryBox.Items.Add(twitterPlugin.NotificationApplication + " (0)");
-
-            notificationCategoryBox.Items.Add("Facebook (0)");
 
             this.parentForm = parent;
+            this.plugins = parentNotifiers;
             this.notifications = parentNotifications;
 
             update();
@@ -35,86 +30,47 @@ namespace FritzNotifier
 
         private void dismissButton_Click(object sender, EventArgs e)
         {
+            object selectedItem = notificationCategoryBox.SelectedItem;
 
-            try
+            if (selectedItem != null)
             {
+                string applicationToDismiss = selectedItem.ToString();
+                applicationToDismiss = applicationToDismiss.Substring(0, applicationToDismiss.IndexOf(" ("));
 
-                string applicationToDismiss = notificationCategoryBox.SelectedItem.ToString().Substring(0, notificationCategoryBox.SelectedItem.ToString().IndexOf(" ("));
-
-                List<Objects.Notification> notificationsToRemove = new List<Objects.Notification>();
-
-                foreach (Objects.Notification notificationToCheck in this.notifications)
-                {
-                    if (notificationToCheck.ApplicationName == applicationToDismiss)
-                    {
-                        notificationsToRemove.Add(notificationToCheck);
-                    }
-                }
-
-                foreach (Objects.Notification notificationToRemove in notificationsToRemove)
-                {
-                    this.notifications.Remove(notificationToRemove);
-                }
+                this.notifications.RemoveAll(x => x.ApplicationName == applicationToDismiss);
 
                 update();
             }
-            catch (NullReferenceException exception)
-            {
-                // Ignore the call
-            }
-
         }
 
         private void goToSiteButton_Click(object sender, EventArgs e)
         {
+            object selectedItem = notificationCategoryBox.SelectedItem;
 
-            try
+            if (selectedItem != null)
             {
-                // if implement plugin collection, search for appropriate one here
-                string item = notificationCategoryBox.SelectedItem.ToString().Substring(0, notificationCategoryBox.SelectedItem.ToString().IndexOf(" ("));
+                string item = selectedItem.ToString();
+                item = item.Substring(0, item.IndexOf(" ("));
 
-                if (item == twitterPlugin.NotificationApplication)
+                var plugin = plugins.Find(x => x.NotificationApplication == item);
+                if (plugin != null)
                 {
-                    Process.Start(twitterPlugin.WebsiteOrProgramAddress);
+                    Process.Start(plugin.WebsiteOrProgramAddress);
                 }
-                else
-                {
-                    Process.Start("http://" + "facebook" + ".com");
-                }
-            }
-            catch (NullReferenceException excep)
-            {
-                // Ignore the event
             }
         }
 
         public void update()
         {
+            notificationCategoryBox.Items.Clear();
 
-            for (int i = 0; i < notificationCategoryBox.Items.Count; i++)
+            foreach (var plugin in plugins)
             {
-                // Remove the (#) count from the end of the line at the index in the listbox.
-                notificationCategoryBox.Items[i] = notificationCategoryBox.Items[i].ToString().Substring(0, notificationCategoryBox.Items[i].ToString().IndexOf("("));
-                int count = 0;
-
-                foreach (Objects.Notification notificationToCheckNameAgainst in this.notifications)
-                {
-
-                    if (notificationCategoryBox.Items[i].ToString().Trim() == notificationToCheckNameAgainst.ApplicationName.Trim())
-                    {
-                        count += 1;
-                    }
-
-                }
-
-                notificationCategoryBox.Items[i] += "(" + count.ToString() + ")";
-                Console.WriteLine(count);
-
+                notificationCategoryBox.Items.Add(plugin.NotificationApplication + " (" + notifications.Count(x => x.ApplicationName == plugin.NotificationApplication).ToString() + ")");
             }
         }
 
-        private Plugins.INotifier twitterPlugin = new Twitter.TwitterNotifier();
-        private List<Objects.Option> twitterOptions = new List<Objects.Option>();
+        private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
         private List<Objects.Notification> notifications = new List<Objects.Notification>();
 
         private void SimpleNotificationForm_Load(object sender, EventArgs e)

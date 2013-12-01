@@ -37,9 +37,6 @@
             // notificationCategoryBox
             // 
             this.notificationCategoryBox.FormattingEnabled = true;
-            this.notificationCategoryBox.Items.AddRange(new object[] {
-            "Facebook (0)",
-            "Twitter (0)"});
             this.notificationCategoryBox.Location = new System.Drawing.Point(12, 35);
             this.notificationCategoryBox.Name = "notificationCategoryBox";
             this.notificationCategoryBox.Size = new System.Drawing.Size(192, 95);

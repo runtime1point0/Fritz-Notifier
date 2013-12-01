@@ -80,6 +80,7 @@
             // notificationTableLayoutPanel
             // 
             this.notificationTableLayoutPanel.AutoScroll = true;
+            this.notificationTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.notificationTableLayoutPanel.ColumnCount = 1;
             this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -137,10 +138,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1078, 598);
             this.Controls.Add(this.mainTabControl);
+            this.DoubleBuffered = true;
             this.Name = "NotificationForm";
             this.Text = "Fritz Notifier";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NotificationForm_FormClosing);
             this.Load += new System.EventHandler(this.NotificationForm_Load);
             this.mainTabControl.ResumeLayout(false);
             this.notificationsTabPage.ResumeLayout(false);
