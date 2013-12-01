@@ -117,9 +117,12 @@ namespace FritzNotifier.Twitter
         //                                 tweet.CreatedAt > option.LastAccessed
         //                                 select tweet).Count();
 
-        //                            var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
-        //                                option.LastAccessed = currentDate;
-        //                                notifications.Add(newTweetCountNotification);
+        //                                if (tweetCount > 0)
+        //                                {
+        //                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+        //                                        option.LastAccessed = currentDate;
+        //                                        notifications.Add(newTweetCountNotification);
+        //                                }
         //                            }
         //                            break;
         //                        case TwitterOptionId.DirectMessage:
@@ -168,9 +171,12 @@ namespace FritzNotifier.Twitter
                             {
                                 int tweetCount = sr.Next(50);
 
-                                var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
-                                option.LastAccessed = currentDate;
-                                notifications.Add(newTweetCountNotification);
+                                if (tweetCount > 0)
+                                {
+                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+                                    option.LastAccessed = currentDate;
+                                    notifications.Add(newTweetCountNotification);
+                                }
                             }
                             break;
                         case TwitterOptionId.DirectMessage:
