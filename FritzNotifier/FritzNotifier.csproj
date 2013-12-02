@@ -35,6 +35,9 @@
     <Reference Include="Facebook">
       <HintPath>.\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="Fritz">
+      <HintPath>..\..\..\..\..\..\Program Files\Fritz\Fritz.exe</HintPath>
+    </Reference>
     <Reference Include="FritzNotifier.Objects">
       <HintPath>..\FritzNotifierObjects\bin\Debug\FritzNotifier.Objects.dll</HintPath>
       <Private>True</Private>
@@ -42,6 +45,11 @@
     <Reference Include="FritzNotifier.Plugins">
       <HintPath>..\FritzNotifierPlugins\bin\Debug\FritzNotifier.Plugins.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Interop.SpeechLib, Version=5.4.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Fritz\Interop.SpeechLib.dll</HintPath>
     </Reference>
     <Reference Include="LinqToTwitter">
       <HintPath>.\LinqToTwitter.dll</HintPath>

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ComponentModel.Composition;
 
+using SpeechLib;
+
 namespace FritzNotifier
 {
     public partial class NotificationForm : Form
@@ -16,6 +18,7 @@ namespace FritzNotifier
         public NotificationForm()
         {
             InitializeComponent();
+            conductor.ConnectionChanged += new EventHandler(conductor_ConnectionChangedCallback);
         }
 
         private class EmptyNotifier : Plugins.INotifier
@@ -58,6 +61,8 @@ namespace FritzNotifier
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
+            PrepareTextToSpeech();
+
             ActivateTimer();
 
             // temporary
@@ -79,6 +84,8 @@ namespace FritzNotifier
                         //checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
                         checkNotifications.Start();
                     }
+
+                    noOptionsLabel.Visible = false;
                 }
                 else
                 {
@@ -89,6 +96,8 @@ namespace FritzNotifier
                         checkNotifications.Dispose();
                         checkNotifications = null;
                     }
+
+                    noOptionsLabel.Visible = true;
                 }
             }
             else
@@ -118,11 +127,56 @@ namespace FritzNotifier
 
                 foreach (var newNotification in newNotifications)
                 {
-                    if (!string.IsNullOrEmpty(newNotification.Speech) || newNotification.AssociatedGesture != 0)
-                    {
-                        // display gesture or say speech
-                    }
+                    HandleNotification(newNotification);
                 }
+            }
+        }
+
+        void HandleNotification(Objects.Notification notification)
+        {
+            if (!string.IsNullOrEmpty(notification.Speech) || notification.AssociatedGesture != 0)
+            {
+                if (notification.AssociatedGesture != 0)
+                {
+                    HandleGesture((Plugins.Gesture)notification.AssociatedGesture);
+                }
+
+                if (!string.IsNullOrEmpty(notification.Speech))
+                {
+                    HandleSpeech(notification.Speech);
+                }
+            }
+        }
+
+        void HandleGesture(Plugins.Gesture gesture)
+        {
+            // TODO: turn back on once finish setting up gestures testing
+            return;
+            if (gesture != 0)
+            {
+                switch (gesture)
+                {
+                    case Plugins.Gesture.Happy:
+                        conductor.SetExpression("Happy");
+                        break;
+                    case Plugins.Gesture.Awkward:
+                        conductor.SetExpression("Awkward");
+                        break;
+                    case Plugins.Gesture.Surprised:
+                        conductor.SetExpression("Surprised");
+                        break;
+                }
+            }
+        }
+
+        private void HandleSpeech(string speech)
+        {
+            if (!string.IsNullOrEmpty(speech))
+            {
+                spVoice.SetVoice((ISpObjectToken)tokens.Item(robotVoiceComboBox.SelectedIndex));
+
+                //spVoice.Speak(notification.Speech, SpeechVoiceSpeakFlags.SVSFlagsAsync);
+                spVoice.Speak(speech);
             }
         }
 
@@ -152,7 +206,8 @@ namespace FritzNotifier
 
         void notificationControl_ReplyNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
         {
-            //throw new NotImplementedException();
+            HandleGesture((Plugins.Gesture)e.Gesture);
+            HandleSpeech(e.Speech);
         }
 
         void notificationControl_DismissNotification(object sender, NotificationControl.DismissNotificationEventArgs e)
@@ -353,6 +408,69 @@ namespace FritzNotifier
         private SimpleNotificationForm childForm;
         private Timer checkNotifications;
 
+        #region Direct Robot Interaction
+
+        private Fritz.Conductor conductor = new Fritz.Conductor();
+        private SpeechLib.SpVoiceClass spVoice = new SpeechLib.SpVoiceClass();
+        private ISpeechObjectTokens tokens;
+
+
+        private void conductor_ConnectionChangedCallback(object sender, EventArgs e)
+        {
+            if (((Fritz.EventArgs<string>)e).Value.Equals("connected"))
+            {
+                connectionStatusLabel.Text = "Robot Connected";
+                connectionStatusLabel.ForeColor = Color.Green;
+            }
+            else
+            {
+                connectionStatusLabel.Text = "Robot Disconnected";
+                connectionStatusLabel.ForeColor = Color.Red;
+            }
+
+            //if (((EventArgs<string>)e).Value.Equals("connected"))
+            //{
+            //    this.Invoke((MethodInvoker)delegate
+            //    {
+            //        ConnectionState.Text = "Connected";
+            //        ConnectionState.BackColor = Color.FromArgb(192, 255, 192);
+            //        calibrationToolStripMenuItem.Enabled = true;
+            //        demoModeToolStripMenuItem.Enabled = true;
+            //        idleModeToolStripMenuItem.Enabled = true;
+            //        exerciseModeToolStripMenuItem.Enabled = true;
+            //    });
+            //}
+            //else
+            //{
+            //    this.Invoke((MethodInvoker)delegate
+            //    {
+            //        ConnectionState.Text = "Disconnected";
+            //        ConnectionState.BackColor = Color.FromArgb(255, 192, 192);
+            //        calibrationToolStripMenuItem.Enabled = false;
+            //        demoModeToolStripMenuItem.Enabled = false;
+            //        idleModeToolStripMenuItem.Enabled = false;
+            //        exerciseModeToolStripMenuItem.Enabled = false;
+            //    });
+            //}
+        }
+
+        private void PrepareTextToSpeech()
+        {
+            tokens = spVoice.GetVoices("", "");
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                robotVoiceComboBox.Items.Add(tokens.Item(i).GetAttribute("Name"));
+            }
+
+            if (tokens.Count > 0)
+            {
+                robotVoiceComboBox.SelectedIndex = 0;
+            }
+        }
+        #endregion
+
+
         private void quickOverViewButton_Click(object sender, EventArgs e)
         {
             if (this.childForm == null)
@@ -403,6 +521,7 @@ namespace FritzNotifier
         {
             // save selected options for reload
             WritePluginOptions();
+            e.Cancel = false;
         }
     }
 }
