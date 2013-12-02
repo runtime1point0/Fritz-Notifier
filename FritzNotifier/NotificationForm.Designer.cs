@@ -137,15 +137,16 @@
             // notificationTableLayoutPanel
             // 
             this.notificationTableLayoutPanel.AutoScroll = true;
+            this.notificationTableLayoutPanel.AutoSize = true;
             this.notificationTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.notificationTableLayoutPanel.ColumnCount = 1;
             this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.notificationTableLayoutPanel.Location = new System.Drawing.Point(3, 34);
             this.notificationTableLayoutPanel.Name = "notificationTableLayoutPanel";
             this.notificationTableLayoutPanel.RowCount = 1;
             this.notificationTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 1000);
+            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 535);
             this.notificationTableLayoutPanel.TabIndex = 1;
             // 
             // configureNotificationsTabPage
@@ -202,6 +203,7 @@
             quickOverviewPanel.PerformLayout();
             this.mainTabControl.ResumeLayout(false);
             this.notificationsTabPage.ResumeLayout(false);
+            this.notificationsTabPage.PerformLayout();
             this.configureNotificationsTabPage.ResumeLayout(false);
             this.configureNotificationsTabPage.PerformLayout();
             this.ResumeLayout(false);

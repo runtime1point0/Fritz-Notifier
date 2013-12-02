@@ -18,6 +18,7 @@ namespace FritzNotifier
         public NotificationForm()
         {
             InitializeComponent();
+            notificationTableLayoutPanel.Padding = new Padding(0, 0, System.Windows.Forms.SystemInformation.VerticalScrollBarWidth, 0);
             conductor.ConnectionChanged += new EventHandler(conductor_ConnectionChangedCallback);
         }
 
@@ -61,7 +62,7 @@ namespace FritzNotifier
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
-            PrepareTextToSpeech();
+            PrepareTextToSpeechAndGestures();
 
             ActivateTimer();
 
@@ -132,54 +133,6 @@ namespace FritzNotifier
             }
         }
 
-        void HandleNotification(Objects.Notification notification)
-        {
-            if (!string.IsNullOrEmpty(notification.Speech) || notification.AssociatedGesture != 0)
-            {
-                if (notification.AssociatedGesture != 0)
-                {
-                    HandleGesture((Plugins.Gesture)notification.AssociatedGesture);
-                }
-
-                if (!string.IsNullOrEmpty(notification.Speech))
-                {
-                    HandleSpeech(notification.Speech);
-                }
-            }
-        }
-
-        void HandleGesture(Plugins.Gesture gesture)
-        {
-            // TODO: turn back on once finish setting up gestures testing
-            return;
-            if (gesture != 0)
-            {
-                switch (gesture)
-                {
-                    case Plugins.Gesture.Happy:
-                        conductor.SetExpression("Happy");
-                        break;
-                    case Plugins.Gesture.Awkward:
-                        conductor.SetExpression("Awkward");
-                        break;
-                    case Plugins.Gesture.Surprised:
-                        conductor.SetExpression("Surprised");
-                        break;
-                }
-            }
-        }
-
-        private void HandleSpeech(string speech)
-        {
-            if (!string.IsNullOrEmpty(speech))
-            {
-                spVoice.SetVoice((ISpObjectToken)tokens.Item(robotVoiceComboBox.SelectedIndex));
-
-                //spVoice.Speak(notification.Speech, SpeechVoiceSpeakFlags.SVSFlagsAsync);
-                spVoice.Speak(speech);
-            }
-        }
-
         internal void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
         {
             bool performLayout = clearPrevious;
@@ -195,16 +148,18 @@ namespace FritzNotifier
                 var notificationControl = new NotificationControl();
                 notificationControl.SetupScreen(newNotification);
                 notificationControl.DismissNotification += notificationControl_DismissNotification;
-                notificationControl.ReplyNotification += notificationControl_ReplyNotification;
+                notificationControl.ReplyNotification += notificationControl_ReplayNotification;
                 notificationTableLayoutPanel.Controls.Add(notificationControl);
                 notificationTableLayoutPanel.SetCellPosition(notificationControl, new TableLayoutPanelCellPosition(0, 0));
                 performLayout = true;
             }
 
+            notificationTableLayoutPanel.RowCount = this.notifications.Count;
+
             notificationTableLayoutPanel.ResumeLayout();
         }
 
-        void notificationControl_ReplyNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
+        void notificationControl_ReplayNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
         {
             HandleGesture((Plugins.Gesture)e.Gesture);
             HandleSpeech(e.Speech);
@@ -414,6 +369,10 @@ namespace FritzNotifier
         private SpeechLib.SpVoiceClass spVoice = new SpeechLib.SpVoiceClass();
         private ISpeechObjectTokens tokens;
 
+        private List<Fritz.RobotState> robotStates = new List<Fritz.RobotState>();
+
+        private Fritz.Recorder placeholderRecorder = new Fritz.Recorder();
+        private Fritz.Simulator placeholderSimulator = new Fritz.Simulator();
 
         private void conductor_ConnectionChangedCallback(object sender, EventArgs e)
         {
@@ -454,7 +413,7 @@ namespace FritzNotifier
             //}
         }
 
-        private void PrepareTextToSpeech()
+        private void PrepareTextToSpeechAndGestures()
         {
             tokens = spVoice.GetVoices("", "");
 
@@ -467,6 +426,103 @@ namespace FritzNotifier
             {
                 robotVoiceComboBox.SelectedIndex = 0;
             }
+
+
+            conductor.SetControls(ref robotStates, ref placeholderRecorder, ref placeholderSimulator);
+            conductor.SetStates(ref robotStates);
+            conductor.SetDistanceTrigger(false, false, false, 60);
+        }
+
+        void HandleNotification(Objects.Notification notification)
+        {
+            if (!string.IsNullOrEmpty(notification.Speech) || notification.AssociatedGesture != 0)
+            {
+                if (notification.AssociatedGesture != 0)
+                {
+                    HandleGesture((Plugins.Gesture)notification.AssociatedGesture);
+                }
+
+                if (!string.IsNullOrEmpty(notification.Speech))
+                {
+                    HandleSpeech(notification.Speech);
+                }
+            }
+        }
+
+        void HandleGesture(Plugins.Gesture gesture)
+        {
+            // TODO: turn back on once finish setting up gestures testing
+            return;
+            if (gesture != 0)
+            {
+                switch (gesture)
+                {
+                    case Plugins.Gesture.Happy:
+                        conductor.SetExpression("Happy");
+                        break;
+                    case Plugins.Gesture.Awkward:
+                        conductor.SetExpression("Awkward");
+                        break;
+                    case Plugins.Gesture.Surprised:
+                        conductor.SetExpression("Surprised");
+                        break;
+                }
+            }
+        }
+
+        private void HandleSpeech(string speech)
+        {
+            if (!string.IsNullOrEmpty(speech))
+            {
+                spVoice.SetVoice((ISpObjectToken)tokens.Item(robotVoiceComboBox.SelectedIndex));
+
+                // TODO: make sure asynchronous call does not cause multiple messages to attempt to be said at once
+                spVoice.Speak(speech, SpeechVoiceSpeakFlags.SVSFlagsAsync);
+                //spVoice.Speak(speech);
+            }
+
+            // TODO: determine if some part of the following needs to be implemented to have robot head move in time with speech
+            //            private void insertTextToSpeechToolStripMenuItem_Click(object sender, EventArgs e)
+            //{
+            //    InsertTextToSpeech iword = new InsertTextToSpeech();
+            //    WaveFormat currentWaveFormat = recorder.GetWaveFormat();
+            //    iword.SetWaveFormat(currentWaveFormat);
+            //    iword.ShowDialog();
+            //    if (iword.DialogResult == DialogResult.OK)
+            //    {
+            //        MemoryStream partialWave = iword.GetWaveStream();
+            //        if (partialWave != null)
+            //        {
+            //            // insert actual audio bytes
+            //            recorder.InsertAudio(partialWave);
+
+            //            long position = recorder.getSelectionStart();
+            //            if (position < 0) position = 0;
+            //            long adjust = (int)(partialWave.Length / (currentWaveFormat.BitsPerSample / 8));
+
+            //            // shift all simulator views past that insert over by that amount
+            //            int i;
+            //            //find the start of the insert
+            //            for (i = 0; (i < robotStates.Count) && (robotStates[i].position < position); i++) ;
+            //            // add new states for each viseme
+            //            int j;
+            //            List<Viseme> visemes = iword.GetVisemes();
+            //            for (j = 0; j < visemes.Count(); j++)
+            //            {
+            //                RobotState ss = conductor.CreateStateFromViseme(visemes[j].viseme);
+            //                ss.position = position + visemes[j].position;
+            //                robotStates.Insert(i++, ss);
+            //            }
+            //            while (i < robotStates.Count)
+            //                robotStates[i++].position += adjust;
+
+            //            conductor.SetStates(ref robotStates);
+            //        }
+            //    }
+            //}
+
+            // TODO: also research everything available through conductor.Set(string, bool) with 1st parameter of "Say {speech here}" and 2nd parameter true
+
         }
         #endregion
 
