@@ -22,45 +22,19 @@ namespace FritzNotifier
             conductor.ConnectionChanged += new EventHandler(conductor_ConnectionChangedCallback);
         }
 
-        private class EmptyNotifier : Plugins.INotifier
-        {
-            public Plugins.OptionsControl CreateOptionsControl(List<Objects.Option> initialValues)
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<Objects.Option> GetAllAvailableOptions()
-            {
-                throw new NotImplementedException();
-            }
-
-            public string NotificationApplication
-            {
-                get { return string.Empty; }
-            }
-
-            public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string WebsiteOrProgramAddress
-            {
-                get { throw new NotImplementedException(); }
-            }
-        }
-
         private void NotificationForm_Load(object sender, EventArgs e)
         {
             LoadPlugins();
             ReadSavedOptions();
 
             List<Plugins.INotifier> pluginsWithBlank = new List<Plugins.INotifier>(plugins.Count);
-            pluginsWithBlank.Add(new EmptyNotifier());
             pluginsWithBlank.AddRange(plugins);
             notificationToConfigureComboBox.DataSource = pluginsWithBlank;
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
+
+            notificationToConfigureComboBox.SelectedIndex = 0;
+            notificationToConfigureComboBox_SelectedIndexChanged(notificationToConfigureComboBox, EventArgs.Empty);
 
             PrepareTextToSpeechAndGestures();
 
