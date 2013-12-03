@@ -87,7 +87,7 @@ namespace FritzNotifier.Facebook
         //                            if (result["data"]["updated_time"] > unixTimestampLastAccessed.ToString())
         //                            {
 
-        //                                var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, (int)option.Gestures[0], "New Facebook notification: " + result["data"]["title_text"], null, currentDate);
+        //                                var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, (int)option.Gestures[0], "New Facebook notification: " + result["data"]["title_text"], null, currentDate);
         //                                option.LastAccessed = currentDate;
         //                                notifications.Add(newMessageNotification);
         //                            }
@@ -146,16 +146,16 @@ namespace FritzNotifier.Facebook
                                 switch (app)
                                 {
                                     case 0:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, option.Gestures[0], emotion + "New Facebook notification: John has sent you a friend request.", null, currentDate);
+                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: John has sent you a friend request.", null, currentDate);
                                         break;
                                     case 1:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, option.Gestures[0], emotion + "New Facebook notification: Mary needs help with her Farmville farm", null, currentDate);
+                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Mary needs help with her Farmville farm", null, currentDate);
                                         break;
                                     case 2:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, option.Gestures[0], emotion + "New Facebook notification: Fred needs your help with his Mafia in Mafia Wars.", null, currentDate);
+                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Fred needs your help with his Mafia in Mafia Wars.", null, currentDate);
                                         break;
                                     case 3:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, option.Gestures[0], emotion + "New Facebook notification: Jenny has commented on one of your posts.", null, currentDate);
+                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Jenny has commented on one of your posts.", null, currentDate);
                                         break;
                                 }
                                 option.LastAccessed = currentDate;

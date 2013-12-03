@@ -93,8 +93,8 @@ namespace FritzNotifier.Twitter
         //            //    Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
         //            //}
 
-        //            var testMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "Test sender" + " sent message " + "message 1", "New message from " + "Test sender", DateTime.Now);
-        //            var testSimpleMessage = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, "simple notification", null, DateTime.Now);
+        //            var testMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "Test sender" + " sent message " + "message 1", "New message from " + "Test sender", DateTime.Now);
+        //            var testSimpleMessage = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "simple notification", null, DateTime.Now);
 
         //            notifications.Add(testMessageNotification);
         //            notifications.Add(testSimpleMessage);
@@ -119,7 +119,7 @@ namespace FritzNotifier.Twitter
 
         //                                if (tweetCount > 0)
         //                                {
-        //                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+        //                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
         //                                        option.LastAccessed = currentDate;
         //                                        notifications.Add(newTweetCountNotification);
         //                                }
@@ -134,7 +134,7 @@ namespace FritzNotifier.Twitter
         //                            foreach (var directMsg in directMsgs)
         //                            {
         //                                // handle appropriately
-        //                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
+        //                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
         //                                notifications.Add(newDirectMessageNotification);
         //                                option.LastAccessed = currentDate;
         //                            }
@@ -173,7 +173,7 @@ namespace FritzNotifier.Twitter
 
                                 if (tweetCount > 0)
                                 {
-                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
                                     option.LastAccessed = currentDate;
                                     notifications.Add(newTweetCountNotification);
                                 }
@@ -214,7 +214,7 @@ namespace FritzNotifier.Twitter
                                         break;
                                 }
 
-                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, 0, name + " sent message " + msg, "New message from " + name, currentDate);
+                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, name + " sent message " + msg, "New message from " + name, currentDate);
                                 notifications.Add(newDirectMessageNotification);
                                 option.LastAccessed = currentDate;
                             }

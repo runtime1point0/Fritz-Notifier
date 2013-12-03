@@ -62,5 +62,13 @@ namespace FritzNotifier
                 ReplyNotification(this, new ReplayNotificationEventArgs() { Gesture = this.notification.AssociatedGesture, Speech = this.notification.Speech });
             }
         }
+
+        private void gotoSiteButton_Click(object sender, EventArgs e)
+        {
+            if (this.notification != null && !string.IsNullOrEmpty(this.notification.ApplicationAddress))
+            {
+                System.Diagnostics.Process.Start(this.notification.ApplicationAddress);
+            }
+        }
     }
 }

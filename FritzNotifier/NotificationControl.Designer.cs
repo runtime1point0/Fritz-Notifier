@@ -32,6 +32,7 @@
             this.dismissButton = new System.Windows.Forms.Button();
             this.replayButton = new System.Windows.Forms.Button();
             this.timeLabel = new System.Windows.Forms.Label();
+            this.gotoSiteButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // notificationTextTextBox
@@ -72,10 +73,21 @@
             this.timeLabel.TabIndex = 3;
             this.timeLabel.Text = "5:49 pm";
             // 
+            // gotoSiteButton
+            // 
+            this.gotoSiteButton.Location = new System.Drawing.Point(0, 39);
+            this.gotoSiteButton.Name = "gotoSiteButton";
+            this.gotoSiteButton.Size = new System.Drawing.Size(75, 23);
+            this.gotoSiteButton.TabIndex = 4;
+            this.gotoSiteButton.Text = "Go to site";
+            this.gotoSiteButton.UseVisualStyleBackColor = true;
+            this.gotoSiteButton.Click += new System.EventHandler(this.gotoSiteButton_Click);
+            // 
             // NotificationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.gotoSiteButton);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.replayButton);
             this.Controls.Add(this.dismissButton);
@@ -93,5 +105,6 @@
         private System.Windows.Forms.Button dismissButton;
         private System.Windows.Forms.Button replayButton;
         private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.Button gotoSiteButton;
     }
 }

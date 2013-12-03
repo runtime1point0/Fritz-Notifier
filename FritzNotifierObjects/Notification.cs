@@ -8,21 +8,27 @@ namespace FritzNotifier.Objects
 {
     public class Notification
     {
-        public Notification(string applicationName, int associatedGesture, string text, string speech) : this(applicationName, associatedGesture, text, speech, System.DateTime.Now) {}
+        public Notification(string applicationName, string applicationAddress, int associatedGesture, string text, string speech) : this(applicationName, applicationAddress, associatedGesture, text, speech, System.DateTime.Now) {}
 
-        public Notification(string applicationName, int associatedGesture, string text, string speech, DateTime notificationTime)
+        public Notification(string applicationName, string applicationAddress, int associatedGesture, string text, string speech, DateTime notificationTime)
         {
             this.ApplicationName = applicationName;
             this.AssociatedGesture = associatedGesture;
             this.Text = text;
             this.Speech = speech;
             this.NotificationTime = notificationTime;
+            this.ApplicationAddress = applicationAddress;
         }
 
         /// <summary>
-        /// Application that 
+        /// Application that sent the notification
         /// </summary>
         public string ApplicationName { get; set; }
+
+        /// <summary>
+        /// Address (URI or file location) for the application
+        /// </summary>
+        public string ApplicationAddress { get; set; }
 
         /// <summary>
         /// Gesture when this notification plays or replays.  0 for no gesture.
