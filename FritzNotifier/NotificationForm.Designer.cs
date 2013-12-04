@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Panel quickOverviewPanel;
+            this.filterComboBox = new System.Windows.Forms.ComboBox();
+            this.filterLabel = new System.Windows.Forms.Label();
             this.robotVoiceLabel = new System.Windows.Forms.Label();
             this.robotVoiceComboBox = new System.Windows.Forms.ComboBox();
             this.noOptionsLabel = new System.Windows.Forms.Label();
@@ -36,17 +38,21 @@
             this.quickOverViewButton = new System.Windows.Forms.Button();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.notificationsTabPage = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.notificationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.simpleViewControl = new FritzNotifier.SimpleViewControl();
             this.configureNotificationsTabPage = new System.Windows.Forms.TabPage();
             this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.ConfigureForLabel = new System.Windows.Forms.Label();
             this.notificationToConfigureComboBox = new System.Windows.Forms.ComboBox();
-            this.filterLabel = new System.Windows.Forms.Label();
-            this.filterComboBox = new System.Windows.Forms.ComboBox();
             quickOverviewPanel = new System.Windows.Forms.Panel();
             quickOverviewPanel.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.notificationsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.configureNotificationsTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +71,24 @@
             quickOverviewPanel.Name = "quickOverviewPanel";
             quickOverviewPanel.Size = new System.Drawing.Size(1064, 31);
             quickOverviewPanel.TabIndex = 1;
+            // 
+            // filterComboBox
+            // 
+            this.filterComboBox.FormattingEnabled = true;
+            this.filterComboBox.Location = new System.Drawing.Point(435, 4);
+            this.filterComboBox.Name = "filterComboBox";
+            this.filterComboBox.Size = new System.Drawing.Size(121, 21);
+            this.filterComboBox.TabIndex = 6;
+            this.filterComboBox.SelectedIndexChanged += new System.EventHandler(this.filterComboBox_SelectedIndexChanged);
+            // 
+            // filterLabel
+            // 
+            this.filterLabel.AutoSize = true;
+            this.filterLabel.Location = new System.Drawing.Point(396, 10);
+            this.filterLabel.Name = "filterLabel";
+            this.filterLabel.Size = new System.Drawing.Size(32, 13);
+            this.filterLabel.TabIndex = 5;
+            this.filterLabel.Text = "Filter:";
             // 
             // robotVoiceLabel
             // 
@@ -128,7 +152,7 @@
             // 
             // notificationsTabPage
             // 
-            this.notificationsTabPage.Controls.Add(this.notificationTableLayoutPanel);
+            this.notificationsTabPage.Controls.Add(this.splitContainer1);
             this.notificationsTabPage.Controls.Add(quickOverviewPanel);
             this.notificationsTabPage.Location = new System.Drawing.Point(4, 22);
             this.notificationsTabPage.Name = "notificationsTabPage";
@@ -138,6 +162,25 @@
             this.notificationsTabPage.Text = "Notifications";
             this.notificationsTabPage.UseVisualStyleBackColor = true;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 34);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.notificationTableLayoutPanel);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.simpleViewControl);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.splitContainer1.Panel2MinSize = 219;
+            this.splitContainer1.Size = new System.Drawing.Size(1064, 535);
+            this.splitContainer1.SplitterDistance = 354;
+            this.splitContainer1.TabIndex = 3;
+            // 
             // notificationTableLayoutPanel
             // 
             this.notificationTableLayoutPanel.AutoScroll = true;
@@ -146,12 +189,20 @@
             this.notificationTableLayoutPanel.ColumnCount = 1;
             this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notificationTableLayoutPanel.Location = new System.Drawing.Point(3, 34);
+            this.notificationTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.notificationTableLayoutPanel.Name = "notificationTableLayoutPanel";
             this.notificationTableLayoutPanel.RowCount = 1;
             this.notificationTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 535);
+            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(354, 535);
             this.notificationTableLayoutPanel.TabIndex = 1;
+            // 
+            // simpleViewControl
+            // 
+            this.simpleViewControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simpleViewControl.Location = new System.Drawing.Point(5, 0);
+            this.simpleViewControl.Name = "simpleViewControl";
+            this.simpleViewControl.Size = new System.Drawing.Size(701, 150);
+            this.simpleViewControl.TabIndex = 2;
             // 
             // configureNotificationsTabPage
             // 
@@ -191,24 +242,6 @@
             this.notificationToConfigureComboBox.TabIndex = 1;
             this.notificationToConfigureComboBox.SelectedIndexChanged += new System.EventHandler(this.notificationToConfigureComboBox_SelectedIndexChanged);
             // 
-            // filterLabel
-            // 
-            this.filterLabel.AutoSize = true;
-            this.filterLabel.Location = new System.Drawing.Point(396, 10);
-            this.filterLabel.Name = "filterLabel";
-            this.filterLabel.Size = new System.Drawing.Size(32, 13);
-            this.filterLabel.TabIndex = 5;
-            this.filterLabel.Text = "Filter:";
-            // 
-            // filterComboBox
-            // 
-            this.filterComboBox.FormattingEnabled = true;
-            this.filterComboBox.Location = new System.Drawing.Point(435, 4);
-            this.filterComboBox.Name = "filterComboBox";
-            this.filterComboBox.Size = new System.Drawing.Size(121, 21);
-            this.filterComboBox.TabIndex = 6;
-            this.filterComboBox.SelectedIndexChanged += new System.EventHandler(this.filterComboBox_SelectedIndexChanged);
-            // 
             // NotificationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,7 +258,11 @@
             quickOverviewPanel.PerformLayout();
             this.mainTabControl.ResumeLayout(false);
             this.notificationsTabPage.ResumeLayout(false);
-            this.notificationsTabPage.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.configureNotificationsTabPage.ResumeLayout(false);
             this.configureNotificationsTabPage.PerformLayout();
             this.ResumeLayout(false);
@@ -248,6 +285,8 @@
         private System.Windows.Forms.ComboBox robotVoiceComboBox;
         private System.Windows.Forms.Label filterLabel;
         private System.Windows.Forms.ComboBox filterComboBox;
+        private SimpleViewControl simpleViewControl;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 

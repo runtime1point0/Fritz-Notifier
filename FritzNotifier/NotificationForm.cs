@@ -38,6 +38,10 @@ namespace FritzNotifier
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
             notificationToConfigureComboBox.DataSource = plugins;
 
+            splitContainer1.BackColor = Color.DarkGray;
+            splitContainer1.Panel1.BackColor = this.BackColor;
+            splitContainer1.Panel2.BackColor = this.BackColor;
+
             BindFilterCombo();
             filterComboBox.SelectedIndex = 0;
 
@@ -128,13 +132,17 @@ namespace FritzNotifier
 
         internal void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
         {
-            notificationsTabPage.Text = string.Format("Notifications ({0})", this.notifications.Count);
+            if (pushingNotifications) return;
 
             pushingNotifications = true;
+            
+            notificationsTabPage.Text = string.Format("Notifications ({0})", this.notifications.Count);
+
             int previouslySelectedIndex = filterComboBox.SelectedIndex;
             BindFilterCombo();
             filterComboBox.SelectedIndex = previouslySelectedIndex;
-            pushingNotifications = false;
+
+            simpleViewControl.InitializeNotificationsCount(this.plugins, this.notifications);
 
             bool performLayout = clearPrevious;
             notificationTableLayoutPanel.SuspendLayout();
@@ -159,6 +167,8 @@ namespace FritzNotifier
             notificationTableLayoutPanel.RowCount = this.notifications.Count;
 
             notificationTableLayoutPanel.ResumeLayout();
+
+            pushingNotifications = false;
         }
 
         void notificationControl_ReplayNotification(object sender, NotificationControl.ReplayNotificationEventArgs e)
@@ -170,6 +180,15 @@ namespace FritzNotifier
         void notificationControl_DismissNotification(object sender, NotificationControl.DismissNotificationEventArgs e)
         {
             notifications.Remove(e.notification);
+            PushNotifications(notifications, true);
+            if (childForm != null)
+            {
+                childForm.update();
+            }
+        }
+
+        void simpleViewControl_DismissNotifications(object sender, EventArgs e)
+        {
             PushNotifications(notifications, true);
             if (childForm != null)
             {
@@ -364,7 +383,7 @@ namespace FritzNotifier
         private List<Plugins.INotifier> plugins = new List<Plugins.INotifier>();
         private Dictionary<string, List<Objects.Option>> pluginOptions = new Dictionary<string, List<Objects.Option>>();
         private List<Objects.Notification> notifications = new List<Objects.Notification>();
-        private SimpleNotificationForm childForm;
+        private SimpleViewForm childForm;
         private Timer checkNotifications;
 
         #region Direct Robot Interaction
@@ -545,7 +564,7 @@ namespace FritzNotifier
         {
             if (this.childForm == null)
             {
-                childForm = new SimpleNotificationForm(this, this.plugins, this.notifications);
+                childForm = new SimpleViewForm(this, this.plugins, this.notifications);
             }
 
             this.Visible = false;
@@ -609,10 +628,7 @@ namespace FritzNotifier
 
         private void filterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!pushingNotifications)
-            {
-                PushNotifications(this.notifications, true);
-            }
+            PushNotifications(this.notifications, true);
         }
     }
 }
