@@ -225,5 +225,26 @@ namespace FritzNotifier.Twitter
             }
             return notifications;
         }
+
+        public void ResetLastAccessed(List<Objects.Option> options, int defaultPollingInterval)
+        {
+            if (options.Count(x => x.Active) > 0)
+            {
+                DateTime currentDate = DateTime.Now;
+                DateTime defaultLastCheckedDate = currentDate.AddMilliseconds(-defaultPollingInterval);
+                foreach (Objects.Option option in options.Where(x => x.Active))
+                {
+                    switch ((TwitterOptionId)option.OptionId)
+                    {
+                        case TwitterOptionId.TweetCount:
+                            option.LastAccessed = currentDate.AddMinutes(-option.Numerics[0]);
+                            break;
+                        default:
+                            option.LastAccessed = defaultLastCheckedDate;
+                            break;
+                    }
+                }
+            }
+        }    
     }
 }

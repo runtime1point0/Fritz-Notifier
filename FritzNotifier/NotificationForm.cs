@@ -22,14 +22,19 @@ namespace FritzNotifier
             conductor.ConnectionChanged += new EventHandler(conductor_ConnectionChangedCallback);
         }
 
+        /// <summary>
+        /// Polling interval in milliseconds
+        /// </summary>
+        private int PollingInterval { get; set; }
+
         private void NotificationForm_Load(object sender, EventArgs e)
         {
+            this.PollingInterval = 1000 * 60; // default to 60 seconds
+
             LoadPlugins();
             ReadSavedOptions();
 
-            List<Plugins.INotifier> pluginsWithBlank = new List<Plugins.INotifier>(plugins.Count);
-            pluginsWithBlank.AddRange(plugins);
-            notificationToConfigureComboBox.DataSource = pluginsWithBlank;
+            notificationToConfigureComboBox.DataSource = plugins;
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
 
@@ -54,9 +59,9 @@ namespace FritzNotifier
                     if (checkNotifications == null)
                     {
                         checkNotifications = new Timer();
-                        checkNotifications.Interval = 1000 * 60; // 60 seconds
+                        checkNotifications.Interval = this.PollingInterval;
                         checkNotifications.Tick += checkNotifications_Tick;
-                        //checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
+                        checkNotifications_Tick(checkNotifications, EventArgs.Empty); // testing for first time
                         checkNotifications.Start();
                     }
 
@@ -249,6 +254,9 @@ namespace FritzNotifier
                     int index = options.FindIndex(x => x.OptionId == Convert.ToInt32(optionElement.Attribute("Id").Value));
 
                     var newOption = new Objects.Option(Convert.ToInt32(optionElement.Attribute("Id").Value), gestures, numerics, active);
+
+                    // TODO: add reset stuff here
+
                     if (index == -1)
                     {
                         options.Add(newOption);
@@ -260,6 +268,7 @@ namespace FritzNotifier
                 }
             }
 
+            plugin.ResetLastAccessed(options, PollingInterval);
             pluginOptions[plugin.NotificationApplication] = options;
         }
 

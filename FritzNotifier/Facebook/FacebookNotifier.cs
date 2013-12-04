@@ -168,5 +168,23 @@ namespace FritzNotifier.Facebook
 
             return notifications;
         }
+
+        public void ResetLastAccessed(List<Objects.Option> options, int defaultPollingInterval)
+        {
+            if (options.Count(x => x.Active) > 0)
+            {
+                DateTime currentDate = DateTime.Now;
+                DateTime defaultLastCheckedDate = currentDate.AddSeconds(-defaultPollingInterval);
+                foreach (Objects.Option option in options.Where(x => x.Active))
+                {
+                    switch ((FacebookOptionId)option.OptionId)
+                    {
+                        default:
+                            option.LastAccessed = defaultLastCheckedDate;
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

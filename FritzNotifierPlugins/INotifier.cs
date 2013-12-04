@@ -15,9 +15,11 @@ namespace FritzNotifier.Plugins
         // gets options for notification for this application with IDs and any defaults set
         List<Objects.Option> GetAllAvailableOptions();
 
-        // subclass of NotificationOptionsControl that displays the options
+        // subclass of OptionsControl that displays the options
         OptionsControl CreateOptionsControl(List<Objects.Option> initialValues);
 
         List<Objects.Notification> TestForNotifications(List<Objects.Option> options);
+
+        void ResetLastAccessed(List<Objects.Option> options, int defaultPollingInterval);
     }
 }
