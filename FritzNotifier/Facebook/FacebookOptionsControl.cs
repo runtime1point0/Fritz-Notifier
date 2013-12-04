@@ -34,13 +34,13 @@ namespace FritzNotifier.Facebook
                         switch ((Plugins.Gesture)option.Gestures[0])
                         {
                             case Plugins.Gesture.Happy:
-                                gestureComboBox.SelectedValue = "Happy";
+                                gestureComboBox.Text = "Happy";
                                 break;
                             case Plugins.Gesture.Surprised:
-                                gestureComboBox.SelectedValue = "Surprised";
+                                gestureComboBox.Text = "Surprised";
                                 break;
                             case Plugins.Gesture.Awkward:
-                                gestureComboBox.SelectedValue = "Awkward";
+                                gestureComboBox.Text = "Awkward";
                                 break;
                         }
                         break;

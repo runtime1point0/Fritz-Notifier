@@ -169,7 +169,7 @@ namespace FritzNotifier.Twitter
                             // if enough time has passed since we last accessed this
                             if ((currentDate - option.LastAccessed).TotalMinutes > option.Numerics[0])
                             {
-                                int tweetCount = sr.Next(50);
+                                int tweetCount = sr.Next(51);
 
                                 if (tweetCount > 0)
                                 {
@@ -186,7 +186,7 @@ namespace FritzNotifier.Twitter
                             {
                                 string name = string.Empty;
 
-                                switch (sr.Next(2))
+                                switch (sr.Next(3))
                                 {
                                     case 0:
                                         name = "@coolperson1";
@@ -201,7 +201,7 @@ namespace FritzNotifier.Twitter
 
                                 string msg = string.Empty;
 
-                                switch (sr.Next(2))
+                                switch (sr.Next(3))
                                 {
                                     case 0:
                                         msg = "Hello!  How are you?";

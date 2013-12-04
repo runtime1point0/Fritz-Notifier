@@ -34,12 +34,12 @@ namespace FritzNotifier
             LoadPlugins();
             ReadSavedOptions();
 
-            notificationToConfigureComboBox.DataSource = plugins;
             notificationToConfigureComboBox.DisplayMember = "NotificationApplication";
             notificationToConfigureComboBox.ValueMember = "NotificationApplication";
+            notificationToConfigureComboBox.DataSource = plugins;
 
-            notificationToConfigureComboBox.SelectedIndex = 0;
-            notificationToConfigureComboBox_SelectedIndexChanged(notificationToConfigureComboBox, EventArgs.Empty);
+            BindFilterCombo();
+            filterComboBox.SelectedIndex = 0;
 
             PrepareTextToSpeechAndGestures();
 
@@ -47,6 +47,18 @@ namespace FritzNotifier
 
             // temporary
             //TestFirst();
+        }
+
+        private void BindFilterCombo()
+        {
+            filterComboBox.Items.Clear();
+
+            filterComboBox.Items.Add("All (" + notifications.Count + ")");
+
+            foreach (var plugin in plugins)
+            {
+                filterComboBox.Items.Add(plugin.NotificationApplication + " (" + notifications.Count(x => x.ApplicationName == plugin.NotificationApplication).ToString() + ")");
+            }
         }
 
         private void ActivateTimer()
@@ -112,8 +124,18 @@ namespace FritzNotifier
             }
         }
 
+        bool pushingNotifications = false;
+
         internal void PushNotifications(List<Objects.Notification> newNotifications, bool clearPrevious)
         {
+            notificationsTabPage.Text = string.Format("Notifications ({0})", this.notifications.Count);
+
+            pushingNotifications = true;
+            int previouslySelectedIndex = filterComboBox.SelectedIndex;
+            BindFilterCombo();
+            filterComboBox.SelectedIndex = previouslySelectedIndex;
+            pushingNotifications = false;
+
             bool performLayout = clearPrevious;
             notificationTableLayoutPanel.SuspendLayout();
             if (clearPrevious)
@@ -121,7 +143,8 @@ namespace FritzNotifier
                 notificationTableLayoutPanel.Controls.Clear();
                 notificationTableLayoutPanel.RowStyles.Clear();
             }
-            foreach (var newNotification in newNotifications)
+            var shownNotifications = (filterComboBox.Text.StartsWith("All (")) ? newNotifications : newNotifications.Where(x => filterComboBox.Text.StartsWith(x.ApplicationName + " ("));
+            foreach (var newNotification in shownNotifications)
             {
                 notificationTableLayoutPanel.RowStyles.Insert(0, new RowStyle(SizeType.AutoSize));
                 var notificationControl = new NotificationControl();
@@ -255,8 +278,6 @@ namespace FritzNotifier
 
                     var newOption = new Objects.Option(Convert.ToInt32(optionElement.Attribute("Id").Value), gestures, numerics, active);
 
-                    // TODO: add reset stuff here
-
                     if (index == -1)
                     {
                         options.Add(newOption);
@@ -361,13 +382,19 @@ namespace FritzNotifier
         {
             if (((Fritz.EventArgs<string>)e).Value.Equals("connected"))
             {
-                connectionStatusLabel.Text = "Robot Connected";
-                connectionStatusLabel.ForeColor = Color.Green;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    connectionStatusLabel.Text = "Robot Connected";
+                    connectionStatusLabel.ForeColor = Color.Green;
+                });
             }
             else
             {
-                connectionStatusLabel.Text = "Robot Disconnected";
-                connectionStatusLabel.ForeColor = Color.Red;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    connectionStatusLabel.Text = "Robot Disconnected";
+                    connectionStatusLabel.ForeColor = Color.Red;
+                });
             }
 
             //if (((EventArgs<string>)e).Value.Equals("connected"))
@@ -434,20 +461,24 @@ namespace FritzNotifier
 
         void HandleGesture(Plugins.Gesture gesture)
         {
-            // TODO: turn back on once finish setting up gestures testing
-            return;
             if (gesture != 0)
             {
                 switch (gesture)
                 {
                     case Plugins.Gesture.Happy:
                         conductor.SetExpression("Happy");
+                        System.Threading.Thread.Sleep(500);
+                        conductor.SetExpression("Neutral");
                         break;
                     case Plugins.Gesture.Awkward:
                         conductor.SetExpression("Awkward");
+                        System.Threading.Thread.Sleep(500);
+                        conductor.SetExpression("Neutral");
                         break;
                     case Plugins.Gesture.Surprised:
                         conductor.SetExpression("Surprised");
+                        System.Threading.Thread.Sleep(500);
+                        conductor.SetExpression("Neutral");
                         break;
                 }
             }
@@ -560,7 +591,28 @@ namespace FritzNotifier
         {
             // save selected options for reload
             WritePluginOptions();
-            e.Cancel = false;
+            if (checkNotifications != null)
+            {
+                checkNotifications.Stop();
+                checkNotifications.Tick -= checkNotifications_Tick;
+                checkNotifications.Dispose();
+                checkNotifications = null;
+            }
+
+            if (this.childForm != null)
+            {
+                childForm.Close();
+            }
+
+            conductor.Close();
+        }
+
+        private void filterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!pushingNotifications)
+            {
+                PushNotifications(this.notifications, true);
+            }
         }
     }
 }

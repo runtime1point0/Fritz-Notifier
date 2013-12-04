@@ -124,7 +124,7 @@ namespace FritzNotifier.Facebook
                             var unixTimestampLastAccessed = System.Convert.ToInt64((DateTime.Now.AddDays(-10) - ePoch).TotalSeconds);
                               */
 
-                            if (sr.Next(4) < 3) // 3 out of 4 will make notification
+                            if (sr.Next(5) < 3) // 3 out of 4 will make notification
                             {
                                 string emotion = "(neutral)";
 

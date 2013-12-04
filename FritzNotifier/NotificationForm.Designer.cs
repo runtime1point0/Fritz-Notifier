@@ -41,6 +41,8 @@
             this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.ConfigureForLabel = new System.Windows.Forms.Label();
             this.notificationToConfigureComboBox = new System.Windows.Forms.ComboBox();
+            this.filterLabel = new System.Windows.Forms.Label();
+            this.filterComboBox = new System.Windows.Forms.ComboBox();
             quickOverviewPanel = new System.Windows.Forms.Panel();
             quickOverviewPanel.SuspendLayout();
             this.mainTabControl.SuspendLayout();
@@ -51,6 +53,8 @@
             // quickOverviewPanel
             // 
             quickOverviewPanel.CausesValidation = false;
+            quickOverviewPanel.Controls.Add(this.filterComboBox);
+            quickOverviewPanel.Controls.Add(this.filterLabel);
             quickOverviewPanel.Controls.Add(this.robotVoiceLabel);
             quickOverviewPanel.Controls.Add(this.robotVoiceComboBox);
             quickOverviewPanel.Controls.Add(this.noOptionsLabel);
@@ -187,6 +191,24 @@
             this.notificationToConfigureComboBox.TabIndex = 1;
             this.notificationToConfigureComboBox.SelectedIndexChanged += new System.EventHandler(this.notificationToConfigureComboBox_SelectedIndexChanged);
             // 
+            // filterLabel
+            // 
+            this.filterLabel.AutoSize = true;
+            this.filterLabel.Location = new System.Drawing.Point(396, 10);
+            this.filterLabel.Name = "filterLabel";
+            this.filterLabel.Size = new System.Drawing.Size(32, 13);
+            this.filterLabel.TabIndex = 5;
+            this.filterLabel.Text = "Filter:";
+            // 
+            // filterComboBox
+            // 
+            this.filterComboBox.FormattingEnabled = true;
+            this.filterComboBox.Location = new System.Drawing.Point(435, 4);
+            this.filterComboBox.Name = "filterComboBox";
+            this.filterComboBox.Size = new System.Drawing.Size(121, 21);
+            this.filterComboBox.TabIndex = 6;
+            this.filterComboBox.SelectedIndexChanged += new System.EventHandler(this.filterComboBox_SelectedIndexChanged);
+            // 
             // NotificationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -224,6 +246,8 @@
         private System.Windows.Forms.Label noOptionsLabel;
         private System.Windows.Forms.Label robotVoiceLabel;
         private System.Windows.Forms.ComboBox robotVoiceComboBox;
+        private System.Windows.Forms.Label filterLabel;
+        private System.Windows.Forms.ComboBox filterComboBox;
     }
 }
 
