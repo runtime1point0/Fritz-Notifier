@@ -541,7 +541,7 @@ namespace FritzNotifier
         #endregion
 
 
-        private void quickOverViewButton_Click(object sender, EventArgs e)
+        private void simpleViewButton_Click(object sender, EventArgs e)
         {
             if (this.childForm == null)
             {
