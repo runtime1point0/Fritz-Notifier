@@ -45,6 +45,8 @@ namespace FritzNotifier
             BindFilterCombo();
             filterComboBox.SelectedIndex = 0;
 
+            simpleViewControl.DismissNotifications += simpleViewControl_DismissNotifications;
+
             PrepareTextToSpeechAndGestures();
 
             ActivateTimer();
