@@ -38,7 +38,9 @@
             this.simpleViewButton = new System.Windows.Forms.Button();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.notificationsTabPage = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.notificationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.simpleViewControl = new FritzNotifier.SimpleViewControl();
             this.configureNotificationsTabPage = new System.Windows.Forms.TabPage();
             this.editingOptionsControlHolderPanel = new System.Windows.Forms.Panel();
             this.ConfigureForLabel = new System.Windows.Forms.Label();
@@ -47,6 +49,10 @@
             quickOverviewPanel.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.notificationsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.configureNotificationsTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -146,7 +152,7 @@
             // 
             // notificationsTabPage
             // 
-            this.notificationsTabPage.Controls.Add(this.notificationTableLayoutPanel);
+            this.notificationsTabPage.Controls.Add(this.splitContainer1);
             this.notificationsTabPage.Controls.Add(quickOverviewPanel);
             this.notificationsTabPage.Location = new System.Drawing.Point(4, 22);
             this.notificationsTabPage.Name = "notificationsTabPage";
@@ -156,6 +162,25 @@
             this.notificationsTabPage.Text = "Notifications";
             this.notificationsTabPage.UseVisualStyleBackColor = true;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 34);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.notificationTableLayoutPanel);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.simpleViewControl);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.splitContainer1.Panel2MinSize = 219;
+            this.splitContainer1.Size = new System.Drawing.Size(1064, 535);
+            this.splitContainer1.SplitterDistance = 354;
+            this.splitContainer1.TabIndex = 3;
+            // 
             // notificationTableLayoutPanel
             // 
             this.notificationTableLayoutPanel.AutoScroll = true;
@@ -164,12 +189,20 @@
             this.notificationTableLayoutPanel.ColumnCount = 1;
             this.notificationTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.notificationTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notificationTableLayoutPanel.Location = new System.Drawing.Point(3, 34);
+            this.notificationTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.notificationTableLayoutPanel.Name = "notificationTableLayoutPanel";
             this.notificationTableLayoutPanel.RowCount = 1;
             this.notificationTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(1064, 535);
+            this.notificationTableLayoutPanel.Size = new System.Drawing.Size(354, 535);
             this.notificationTableLayoutPanel.TabIndex = 1;
+            // 
+            // simpleViewControl
+            // 
+            this.simpleViewControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simpleViewControl.Location = new System.Drawing.Point(5, 0);
+            this.simpleViewControl.Name = "simpleViewControl";
+            this.simpleViewControl.Size = new System.Drawing.Size(701, 150);
+            this.simpleViewControl.TabIndex = 2;
             // 
             // configureNotificationsTabPage
             // 
@@ -225,7 +258,11 @@
             quickOverviewPanel.PerformLayout();
             this.mainTabControl.ResumeLayout(false);
             this.notificationsTabPage.ResumeLayout(false);
-            this.notificationsTabPage.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.configureNotificationsTabPage.ResumeLayout(false);
             this.configureNotificationsTabPage.PerformLayout();
             this.ResumeLayout(false);
@@ -248,6 +285,8 @@
         private System.Windows.Forms.ComboBox robotVoiceComboBox;
         private System.Windows.Forms.Label filterLabel;
         private System.Windows.Forms.ComboBox filterComboBox;
+        private SimpleViewControl simpleViewControl;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 
