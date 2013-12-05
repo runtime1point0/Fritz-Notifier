@@ -47,120 +47,120 @@ namespace FritzNotifier.Twitter
             return options;
         }
 
-        //public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
-        //{
-        //    var notifications = new List<Objects.Notification>(options.Count);
+        public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
+        {
+            var notifications = new List<Objects.Notification>(options.Count);
 
-        //    //if (options.Count(x => x.Active) > 0)
-        //    {
-        //        var auth = new LinqToTwitter.SingleUserAuthorizer
-        //        {
-        //            Credentials = new LinqToTwitter.SingleUserInMemoryCredentials
-        //            {
-        //                ConsumerKey = System.Configuration.ConfigurationManager.AppSettings.Get("consumerKey"),
-        //                ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings.Get("consumerSecret"),
-        //                //AccessToken = "accessToken",
-        //                //AccessTokenSecret = "accessTokenSecret"
-        //                TwitterAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("accessToken"),
-        //                TwitterAccessTokenSecret = System.Configuration.ConfigurationManager.AppSettings.Get("accessTokenSecret")
-        //            }
-        //        };
+            //if (options.Count(x => x.Active) > 0)
+            {
+                var auth = new LinqToTwitter.SingleUserAuthorizer
+                {
+                    Credentials = new LinqToTwitter.SingleUserInMemoryCredentials
+                    {
+                        ConsumerKey = System.Configuration.ConfigurationManager.AppSettings.Get("consumerKey"),
+                        ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings.Get("consumerSecret"),
+                        //AccessToken = "accessToken",
+                        //AccessTokenSecret = "accessTokenSecret"
+                        TwitterAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("accessToken"),
+                        TwitterAccessTokenSecret = System.Configuration.ConfigurationManager.AppSettings.Get("accessTokenSecret")
+                    }
+                };
 
-        //        auth.Authorize();
+                auth.Authorize();
 
-        //        using (var ctx = new LinqToTwitter.TwitterContext(auth))
-        //        {
+                using (var ctx = new LinqToTwitter.TwitterContext(auth))
+                {
 
 
-        //            //try
-        //            //{
-        //            //    //Account account = accounts.SingleOrDefault();
-        //            //    Account account = ctx.Account.Single(acct => acct.Type == AccountType.VerifyCredentials && acct.SkipStatus == true);
-        //            //    //var account = twitterCtx.Account
-        //            //    //    .Where(t => t.Type == AccountType.VerifyCredentials)
-        //            //    //    .FirstOrDefault(t => t.SkipStatus == true);
-        //            //    User user = account.User;
-        //            //    Status tweet = user.Status ?? new Status();
-        //            //    Console.WriteLine("User (#" + user.Identifier.ID
-        //            //                        + "): " + user.Identifier.ScreenName
-        //            //                        + "\nTweet: " + tweet.Text
-        //            //                        + "\nTweet ID: " + tweet.StatusID + "\n");
+                    try
+                    {
+                        //Account account = accounts.SingleOrDefault();
+                        Account account = ctx.Account.Single(acct => acct.Type == AccountType.VerifyCredentials && acct.SkipStatus == true);
+                        //var account = twitterCtx.Account
+                        //    .Where(t => t.Type == AccountType.VerifyCredentials)
+                        //    .FirstOrDefault(t => t.SkipStatus == true);
+                        User user = account.User;
+                        Status tweet = user.Status ?? new Status();
+                        Console.WriteLine("User (#" + user.Identifier.ID
+                                            + "): " + user.Identifier.ScreenName
+                                            + "\nTweet: " + tweet.Text
+                                            + "\nTweet ID: " + tweet.StatusID + "\n");
 
-        //            //    Console.WriteLine("Account credentials are verified.");
-        //            //}
-        //            //catch (System.Net.WebException wex)
-        //            //{
-        //            //    Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
-        //            //}
+                        Console.WriteLine("Account credentials are verified.");
+                    }
+                    catch (System.Net.WebException wex)
+                    {
+                        Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
+                    }
 
-        //            var testMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "Test sender" + " sent message " + "message 1", "New message from " + "Test sender", DateTime.Now);
-        //            var testSimpleMessage = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "simple notification", null, DateTime.Now);
+                    //var testMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "Test sender" + " sent message " + "message 1", "New message from " + "Test sender", DateTime.Now);
+                    //var testSimpleMessage = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, "simple notification", null, DateTime.Now);
 
-        //            notifications.Add(testMessageNotification);
-        //            notifications.Add(testSimpleMessage);
-        //            return notifications;
+                    //notifications.Add(testMessageNotification);
+                    //notifications.Add(testSimpleMessage);
+                    //return notifications;
 
-        //            try
-        //            {
-        //                DateTime currentDate = DateTime.Now;
-        //                foreach (Objects.Option option in options.Where(x => x.Active))
-        //                {
-        //                    switch ((TwitterOptionId)option.OptionId)
-        //                    {
-        //                        case TwitterOptionId.TweetCount:
-        //                            // if enough time has passed since we last accessed this
-        //                            if ((currentDate - option.LastAccessed).TotalMinutes > option.Numerics[0])
-        //                            {
-        //                            int tweetCount =
-        //                                (from tweet in ctx.Status
-        //                                 where tweet.Type == StatusType.Home &&
-        //                                 tweet.CreatedAt > option.LastAccessed
-        //                                 select tweet).Count();
+                    try
+                    {
+                        DateTime currentDate = DateTime.Now.ToUniversalTime();
+                        foreach (Objects.Option option in options.Where(x => x.Active))
+                        {
+                            switch ((TwitterOptionId)option.OptionId)
+                            {
+                                case TwitterOptionId.TweetCount:
+                                    // if enough time has passed since we last accessed this
+                                    if ((currentDate - option.LastAccessed).TotalMinutes > option.Numerics[0])
+                                    {
+                                        int tweetCount =
+                                            (from tweet in ctx.Status
+                                             where tweet.Type == StatusType.Home &&
+                                             tweet.CreatedAt > option.LastAccessed
+                                             select tweet).Count();
 
-        //                                if (tweetCount > 0)
-        //                                {
-        //                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
-        //                                        option.LastAccessed = currentDate;
-        //                                        notifications.Add(newTweetCountNotification);
-        //                                }
-        //                            }
-        //                            break;
-        //                        case TwitterOptionId.DirectMessage:
-        //                            var directMsgs =
-        //                                (from dm in ctx.DirectMessage
-        //                                 where dm.Type == DirectMessageType.SentTo &&
-        //                                 dm.CreatedAt > option.LastAccessed
-        //                                 select dm).ToList();
-        //                            foreach (var directMsg in directMsgs)
-        //                            {
-        //                                // handle appropriately
-        //                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
-        //                                notifications.Add(newDirectMessageNotification);
-        //                                option.LastAccessed = currentDate;
-        //                            }
+                                        if (tweetCount > 0)
+                                        {
+                                            var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+                                            option.LastAccessed = currentDate;
+                                            notifications.Add(newTweetCountNotification);
+                                        }
+                                    }
+                                    break;
+                                case TwitterOptionId.DirectMessage:
+                                    var directMsgs =
+                                        (from dm in ctx.DirectMessage
+                                         where dm.Type == DirectMessageType.SentTo &&
+                                         dm.CreatedAt > option.LastAccessed
+                                         select dm).ToList();
+                                    foreach (var directMsg in directMsgs)
+                                    {
+                                        // handle appropriately
+                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
+                                        notifications.Add(newDirectMessageNotification);
+                                        option.LastAccessed = currentDate;
+                                    }
 
-        //                            break;
-        //                    }
-        //                }
-        //            }
-        //            catch (System.Net.WebException wex)
-        //            {
-        //                Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
-        //            }
-        //        }
-        //    }
+                                    break;
+                            }
+                        }
+                    }
+                    catch (System.Net.WebException wex)
+                    {
+                        Console.WriteLine("Twitter did not recognize the credentials. Response from Twitter: " + wex.Message);
+                    }
+                }
+            }
 
-        //    return notifications;
-        //}
+            return notifications;
+        }
 
         System.Random sr = new System.Random();
-        public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
+        public List<Objects.Notification> ProtoTypeTestForNotifications(List<Objects.Option> options)
         {
             var notifications = new List<Objects.Notification>(options.Count);
 
             if (options.Count(x => x.Active) > 0)
             {
-                DateTime currentDate = DateTime.Now;
+                DateTime currentDate = DateTime.Now.ToUniversalTime();
                 foreach (Objects.Option option in options.Where(x => x.Active))
                 {
                     switch ((TwitterOptionId)option.OptionId)
@@ -230,7 +230,7 @@ namespace FritzNotifier.Twitter
         {
             if (options.Count(x => x.Active) > 0)
             {
-                DateTime currentDate = DateTime.Now;
+                DateTime currentDate = DateTime.Now.ToUniversalTime();
                 DateTime defaultLastCheckedDate = currentDate.AddMilliseconds(-defaultPollingInterval);
                 foreach (Objects.Option option in options.Where(x => x.Active))
                 {

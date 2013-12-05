@@ -51,6 +51,7 @@ namespace FritzNotifier
 
             ActivateTimer();
 
+
             // temporary
             //TestFirst();
         }
@@ -511,9 +512,13 @@ namespace FritzNotifier
             {
                 spVoice.SetVoice((ISpObjectToken)tokens.Item(robotVoiceComboBox.SelectedIndex));
 
-                // TODO: make sure asynchronous call does not cause multiple messages to attempt to be said at once
-                spVoice.Speak(speech, SpeechVoiceSpeakFlags.SVSFlagsAsync);
-                //spVoice.Speak(speech);
+                // conductor.Set("Say " + speech, true);
+                //// TODO: make sure asynchronous call does not cause multiple messages to attempt to be said at once
+
+                new Fritz.Speak(conductor, speech, robotVoiceComboBox.SelectedIndex);
+                //spVoice.Speak(speech, SpeechVoiceSpeakFlags.SVSFlagsAsync);
+                ////spVoice.Speak(speech);
+
             }
 
             // TODO: determine if some part of the following needs to be implemented to have robot head move in time with speech
