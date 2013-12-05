@@ -29,7 +29,9 @@ namespace FritzNotifier
 
         private void NotificationForm_Load(object sender, EventArgs e)
         {
-            this.PollingInterval = 1000 * 60; // default to 60 seconds
+            //this.PollingInterval = 1000 * 60; // default to 60 seconds
+
+            this.PollingInterval = 1000 * 10;
 
             LoadPlugins();
             ReadSavedOptions();
@@ -217,9 +219,9 @@ namespace FritzNotifier
             plugins.Add(new Twitter.TwitterNotifier());
             plugins.Add(new Facebook.FacebookNotifier());
 
-            if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"plugins\"))
+            if (System.IO.Directory.Exists(System.Windows.Forms.Application.StartupPath + @"\plugins\"))
             {
-                foreach (string fileName in System.IO.Directory.GetFiles(System.Windows.Forms.Application.StartupPath + @"plugins\", "*.dll", System.IO.SearchOption.TopDirectoryOnly))
+                foreach (string fileName in System.IO.Directory.GetFiles(System.Windows.Forms.Application.StartupPath + @"\plugins\", "*.dll", System.IO.SearchOption.TopDirectoryOnly))
                 {
                     System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.LoadFrom(fileName);
 
