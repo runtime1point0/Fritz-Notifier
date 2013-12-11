@@ -74,11 +74,19 @@ namespace FritzNotifier
 
         public void update()
         {
+            int selectedIndex = notificationCategoryBox.SelectedIndex;
+
             notificationCategoryBox.Items.Clear();
 
             foreach (var plugin in plugins)
             {
                 notificationCategoryBox.Items.Add(plugin.NotificationApplication + " (" + notifications.Count(x => x.ApplicationName == plugin.NotificationApplication).ToString() + ")");
+            }
+
+            if (notificationCategoryBox.Items.Count > selectedIndex && notificationCategoryBox.Items.Count > 0)
+            {
+                if (selectedIndex == -1) selectedIndex = 0;
+                notificationCategoryBox.SelectedIndex = selectedIndex;
             }
         }
 

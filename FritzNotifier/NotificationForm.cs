@@ -29,9 +29,9 @@ namespace FritzNotifier
 
         private void NotificationForm_Load(object sender, EventArgs e)
         {
-            //this.PollingInterval = 1000 * 60; // default to 60 seconds
+            this.PollingInterval = 1000 * 60; // default to 60 seconds
 
-            this.PollingInterval = 1000 * 10;
+            //this.PollingInterval = 1000 * 10;
 
             LoadPlugins();
             ReadSavedOptions();

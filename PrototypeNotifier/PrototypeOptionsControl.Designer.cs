@@ -50,7 +50,7 @@
             this.TweetCountCheckbox.Location = new System.Drawing.Point(16, 46);
             this.TweetCountCheckbox.Name = "TweetCountCheckbox";
             this.TweetCountCheckbox.Size = new System.Drawing.Size(86, 17);
-            this.TweetCountCheckbox.TabIndex = 0;
+            this.TweetCountCheckbox.TabIndex = 2;
             this.TweetCountCheckbox.Text = "Check every";
             this.TweetCountCheckbox.UseVisualStyleBackColor = true;
             // 
@@ -69,7 +69,7 @@
             0});
             this.TweetCountMinutesNumericUpDown.Name = "TweetCountMinutesNumericUpDown";
             this.TweetCountMinutesNumericUpDown.Size = new System.Drawing.Size(40, 20);
-            this.TweetCountMinutesNumericUpDown.TabIndex = 1;
+            this.TweetCountMinutesNumericUpDown.TabIndex = 3;
             this.TweetCountMinutesNumericUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -82,7 +82,7 @@
             this.TweetCountMinuteLabel.Location = new System.Drawing.Point(153, 49);
             this.TweetCountMinuteLabel.Name = "TweetCountMinuteLabel";
             this.TweetCountMinuteLabel.Size = new System.Drawing.Size(156, 13);
-            this.TweetCountMinuteLabel.TabIndex = 2;
+            this.TweetCountMinuteLabel.TabIndex = 4;
             this.TweetCountMinuteLabel.Text = "minutes for special notifications.";
             // 
             // ReadDirectMessagecheckBox
@@ -91,7 +91,7 @@
             this.ReadDirectMessagecheckBox.Location = new System.Drawing.Point(16, 71);
             this.ReadDirectMessagecheckBox.Name = "ReadDirectMessagecheckBox";
             this.ReadDirectMessagecheckBox.Size = new System.Drawing.Size(125, 17);
-            this.ReadDirectMessagecheckBox.TabIndex = 3;
+            this.ReadDirectMessagecheckBox.TabIndex = 5;
             this.ReadDirectMessagecheckBox.Text = "Read new messages";
             this.ReadDirectMessagecheckBox.UseVisualStyleBackColor = true;
             // 

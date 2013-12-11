@@ -47,7 +47,7 @@
             this.ReactToNotificationsCheckBox.Location = new System.Drawing.Point(16, 41);
             this.ReactToNotificationsCheckBox.Name = "ReactToNotificationsCheckBox";
             this.ReactToNotificationsCheckBox.Size = new System.Drawing.Size(185, 17);
-            this.ReactToNotificationsCheckBox.TabIndex = 3;
+            this.ReactToNotificationsCheckBox.TabIndex = 2;
             this.ReactToNotificationsCheckBox.Text = "React to new notifications.  Make";
             this.ReactToNotificationsCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -61,7 +61,7 @@
             this.gestureComboBox.Location = new System.Drawing.Point(196, 37);
             this.gestureComboBox.Name = "gestureComboBox";
             this.gestureComboBox.Size = new System.Drawing.Size(121, 21);
-            this.gestureComboBox.TabIndex = 4;
+            this.gestureComboBox.TabIndex = 3;
             // 
             // faceLabel
             // 
@@ -69,7 +69,7 @@
             this.faceLabel.Location = new System.Drawing.Point(323, 42);
             this.faceLabel.Name = "faceLabel";
             this.faceLabel.Size = new System.Drawing.Size(31, 13);
-            this.faceLabel.TabIndex = 5;
+            this.faceLabel.TabIndex = 4;
             this.faceLabel.Text = "face.";
             // 
             // FacebookOptionsControl

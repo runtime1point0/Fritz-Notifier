@@ -49,6 +49,7 @@ namespace FritzNotifier.Twitter
 
         public TwitterNotifier()
         {
+            //return;
             try
             {
                 auth = new LinqToTwitter.SingleUserAuthorizer
@@ -77,7 +78,7 @@ namespace FritzNotifier.Twitter
         public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
         {
             var notifications = new List<Objects.Notification>(options.Count);
-
+            //return notifications;
             if (options.Count(x => x.Active) > 0)
             {
                 using (var ctx = new LinqToTwitter.TwitterContext(auth))
