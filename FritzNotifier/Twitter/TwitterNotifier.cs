@@ -47,13 +47,12 @@ namespace FritzNotifier.Twitter
             return options;
         }
 
-        public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
+        public TwitterNotifier()
         {
-            var notifications = new List<Objects.Notification>(options.Count);
-
-            //if (options.Count(x => x.Active) > 0)
+            //return;
+            try
             {
-                var auth = new LinqToTwitter.SingleUserAuthorizer
+                auth = new LinqToTwitter.SingleUserAuthorizer
                 {
                     Credentials = new LinqToTwitter.SingleUserInMemoryCredentials
                     {
@@ -67,7 +66,21 @@ namespace FritzNotifier.Twitter
                 };
 
                 auth.Authorize();
+            }
+            catch (System.Net.WebException wex)
+            {
+                Console.WriteLine("Authorization or credential error. Response from Twitter: " + wex.Message);
+            }
+        }
 
+        private LinqToTwitter.SingleUserAuthorizer auth;
+
+        public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
+        {
+            var notifications = new List<Objects.Notification>(options.Count);
+            //return notifications;
+            if (options.Count(x => x.Active) > 0)
+            {
                 using (var ctx = new LinqToTwitter.TwitterContext(auth))
                 {
 
@@ -102,7 +115,8 @@ namespace FritzNotifier.Twitter
 
                     try
                     {
-                        DateTime currentDate = DateTime.Now.ToUniversalTime();
+                        DateTime currentDateLocal = DateTime.Now;
+                        DateTime currentDate = currentDateLocal.ToUniversalTime();
                         foreach (Objects.Option option in options.Where(x => x.Active))
                         {
                             switch ((TwitterOptionId)option.OptionId)
@@ -119,7 +133,7 @@ namespace FritzNotifier.Twitter
 
                                         if (tweetCount > 0)
                                         {
-                                            var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
+                                            var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDateLocal);
                                             option.LastAccessed = currentDate;
                                             notifications.Add(newTweetCountNotification);
                                         }
@@ -150,79 +164,6 @@ namespace FritzNotifier.Twitter
                 }
             }
 
-            return notifications;
-        }
-
-        System.Random sr = new System.Random();
-        public List<Objects.Notification> ProtoTypeTestForNotifications(List<Objects.Option> options)
-        {
-            var notifications = new List<Objects.Notification>(options.Count);
-
-            if (options.Count(x => x.Active) > 0)
-            {
-                DateTime currentDate = DateTime.Now.ToUniversalTime();
-                foreach (Objects.Option option in options.Where(x => x.Active))
-                {
-                    switch ((TwitterOptionId)option.OptionId)
-                    {
-                        case TwitterOptionId.TweetCount:
-                            // if enough time has passed since we last accessed this
-                            if ((currentDate - option.LastAccessed).TotalMinutes > option.Numerics[0])
-                            {
-                                int tweetCount = sr.Next(51);
-
-                                if (tweetCount > 0)
-                                {
-                                    var newTweetCountNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, tweetCount.ToString() + " new tweets.", tweetCount.ToString() + " new tweets.", currentDate);
-                                    option.LastAccessed = currentDate;
-                                    notifications.Add(newTweetCountNotification);
-                                }
-                            }
-                            break;
-                        case TwitterOptionId.DirectMessage:
-
-                            int messageCount = sr.Next(3); // between 0 and 2 possible messages
-                            for (int i = 0; i < messageCount; i++)
-                            {
-                                string name = string.Empty;
-
-                                switch (sr.Next(3))
-                                {
-                                    case 0:
-                                        name = "@coolperson1";
-                                        break;
-                                    case 1:
-                                        name = "@myfriend";
-                                        break;
-                                    case 2:
-                                        name = "@fritz020202";
-                                        break;
-                                }
-
-                                string msg = string.Empty;
-
-                                switch (sr.Next(3))
-                                {
-                                    case 0:
-                                        msg = "Hello!  How are you?";
-                                        break;
-                                    case 1:
-                                        msg = "Did you see the score of the game?";
-                                        break;
-                                    case 2:
-                                        msg = "Call me please.";
-                                        break;
-                                }
-
-                                var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, name + " sent message " + msg, "New message from " + name, currentDate);
-                                notifications.Add(newDirectMessageNotification);
-                                option.LastAccessed = currentDate;
-                            }
-
-                            break;
-                    }
-                }
-            }
             return notifications;
         }
 

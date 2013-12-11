@@ -49,7 +49,7 @@
             this.dismissButton.Location = new System.Drawing.Point(254, -1);
             this.dismissButton.Name = "dismissButton";
             this.dismissButton.Size = new System.Drawing.Size(75, 23);
-            this.dismissButton.TabIndex = 1;
+            this.dismissButton.TabIndex = 2;
             this.dismissButton.Text = "Dismiss";
             this.dismissButton.UseVisualStyleBackColor = true;
             this.dismissButton.Click += new System.EventHandler(this.dismissButton_Click);
@@ -59,7 +59,7 @@
             this.replayButton.Location = new System.Drawing.Point(254, 30);
             this.replayButton.Name = "replayButton";
             this.replayButton.Size = new System.Drawing.Size(75, 23);
-            this.replayButton.TabIndex = 2;
+            this.replayButton.TabIndex = 3;
             this.replayButton.Text = "Replay";
             this.replayButton.UseVisualStyleBackColor = true;
             this.replayButton.Click += new System.EventHandler(this.replayButton_Click);
@@ -70,7 +70,7 @@
             this.timeLabel.Location = new System.Drawing.Point(255, 61);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(83, 23);
-            this.timeLabel.TabIndex = 3;
+            this.timeLabel.TabIndex = 4;
             this.timeLabel.Text = "5:49 pm";
             // 
             // gotoSiteButton
@@ -78,7 +78,7 @@
             this.gotoSiteButton.Location = new System.Drawing.Point(0, 39);
             this.gotoSiteButton.Name = "gotoSiteButton";
             this.gotoSiteButton.Size = new System.Drawing.Size(75, 23);
-            this.gotoSiteButton.TabIndex = 4;
+            this.gotoSiteButton.TabIndex = 1;
             this.gotoSiteButton.Text = "Go to site";
             this.gotoSiteButton.UseVisualStyleBackColor = true;
             this.gotoSiteButton.Click += new System.EventHandler(this.gotoSiteButton_Click);

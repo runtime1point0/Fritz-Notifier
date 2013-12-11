@@ -47,12 +47,53 @@ namespace FritzNotifier.Facebook
         FacebookClient userClient = null;
         string userId = null;
 
+        public FacebookNotifier()
+        {
+            if (appClient == null)
+            {
+                var appAccessTokenLong = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppIdLong");
+                var appAccessToken = System.Configuration.ConfigurationManager.AppSettings.Get("fbAppId");
+                appClient = new FacebookClient(appAccessTokenLong);
+
+                DeleteAllCurrentTestUsers(appAccessTokenLong, appAccessToken);
+                CreateTwoTestFriendUsers(appAccessTokenLong, appAccessToken);
+            }
+        }
+
+        private void DeleteAllCurrentTestUsers(string appAccessTokenLong, string appAccessToken)
+        {
+            dynamic usersResult = appClient.Get(string.Format("{0}/accounts/test-users", appAccessToken), new { });
+            if (usersResult["data"].Count > 0)
+            {
+                foreach (dynamic data in usersResult["data"])
+                {
+                    dynamic id = data["id"];
+
+                    dynamic deleteUserResult = appClient.Delete(string.Format("{0}", id), new { access_token=data["access_token"] });
+                }
+            }
+        }
+
+        private void CreateTwoTestFriendUsers(string appAccessTokenLong, string appAccessToken)
+        {
+            dynamic userResult = appClient.Post(string.Format("{0}/accounts/test-users", appAccessToken), new { installed = true, name = "Fritz Test", permissions = "manage_notifications" });
+            userClient = new FacebookClient((string)(userResult["access_token"]));
+            userId = userResult["id"];
+
+            string friendId;
+            dynamic user2Result = appClient.Post(string.Format("{0}/accounts/test-users", appAccessToken), new { installed = true, name = "Fritz Talker" });
+            var user2Client = new FacebookClient((string)(user2Result["access_token"]));
+            friendId = user2Result["id"];
+
+            userClient.Post(string.Format("{0}/friends/{1}", userId, friendId), new {});
+            user2Client.Post(string.Format("{0}/friends/{1}", friendId, userId), new {});
+        }
+
         System.Random sr = new System.Random();
 
         public List<Objects.Notification> TestForNotifications(List<Objects.Option> options)
         {
             var notifications = new List<Objects.Notification>(options.Count);
-
             if (options.Count(x => x.Active) > 0)
             {
                 if (appClient == null)
@@ -68,7 +109,9 @@ namespace FritzNotifier.Facebook
 
                 try
                 {
-                    DateTime currentDate = DateTime.Now.ToUniversalTime();
+                    DateTime currentDateLocal = DateTime.Now;
+                    DateTime currentDate = currentDateLocal.ToUniversalTime();
+                    //DateTime currentDate = DateTime.Now.ToUniversalTime();
                     foreach (Objects.Option option in options.Where(x => x.Active))
                     {
                         switch ((FacebookOptionId)option.OptionId)
@@ -76,23 +119,27 @@ namespace FritzNotifier.Facebook
                             case FacebookOptionId.NewNotification:
 
                                 DateTime ePoch = new DateTime(1970, 1, 1, 0, 0, 0);
-                                var unixTimestampLastAccessed = System.Convert.ToInt64((option.LastAccessed.ToUniversalTime().AddHours(8) - ePoch).TotalSeconds);
-                                //var unixTimestampLastAccessed = System.Convert.ToInt64((currentDate.AddDays(-10) - ePoch).TotalSeconds);
+                                // Unix timestamp is seconds past epoch
+
+                                var unixTimestampLastAccessed = DateTimeConvertor.ToUnixTime(option.LastAccessed);
 
                                 //dynamic result = userClient.Get("fql", new { q = "SELECT author_id, body, source FROM message" });
                                 dynamic result = userClient.Get("fql", new { q = "SELECT title_text, updated_time FROM notification WHERE recipient_id = " + userId });
 
                                 if (result["data"].Count > 0)
                                 {
+                                    int index = 0;
                                     foreach (dynamic data in result["data"])
                                     {
                                         if (data["updated_time"] > unixTimestampLastAccessed)
                                         {
+                                            var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, (int)option.Gestures[0], "New Facebook notification: " + data["title_text"], null, currentDateLocal);
+                                            option.LastAccessed = currentDate;
+                                            Console.WriteLine("Setting last {0}", option.LastAccessed);
 
-                                            var newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, (int)option.Gestures[0], "New Facebook notification: " + data["title_text"], null, currentDate);
-                                            option.LastAccessed = currentDate.ToLocalTime();
                                             notifications.Add(newMessageNotification);
                                         }
+                                        index++;
                                     }
                                 }
                                 break;
@@ -108,76 +155,12 @@ namespace FritzNotifier.Facebook
             return notifications;
         }
 
-        public List<Objects.Notification> PrototypeTestForNotifications(List<Objects.Option> options)
-        {
-            var notifications = new List<Objects.Notification>(options.Count);
-
-            if (options.Count(x => x.Active) > 0)
-            {
-                DateTime currentDate = DateTime.Now;
-                foreach (Objects.Option option in options.Where(x => x.Active))
-                {
-                    switch ((FacebookOptionId)option.OptionId)
-                    {
-                        case FacebookOptionId.NewNotification:
-
-                            /* 
-                            DateTime ePoch = new DateTime(1970, 1, 1, 0, 0, 0);
-                            //var unixTimestampLastAccessed = System.Convert.ToInt64((option.LastAccessed - ePoch).TotalSeconds);
-                            var unixTimestampLastAccessed = System.Convert.ToInt64((DateTime.Now.AddDays(-10) - ePoch).TotalSeconds);
-                              */
-
-                            if (sr.Next(5) < 3) // 3 out of 4 will make notification
-                            {
-                                string emotion = "(neutral)";
-
-                                switch ((Plugins.Gesture)option.Gestures[0])
-                                {
-                                    case Plugins.Gesture.Happy:
-                                        emotion = "(Happy face! :-) ) ";
-                                        break;
-                                    case Plugins.Gesture.Awkward:
-                                        emotion = "(-Awkward-)";
-                                        break;
-                                    case Plugins.Gesture.Surprised:
-                                        emotion = "(SUPRISED!!!!)";
-                                        break;
-                                }
-
-                                FritzNotifier.Objects.Notification newMessageNotification = null;
-                                int app = sr.Next(4);
-                                switch (app)
-                                {
-                                    case 0:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: John has sent you a friend request.", null, currentDate);
-                                        break;
-                                    case 1:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Mary needs help with her Farmville farm", null, currentDate);
-                                        break;
-                                    case 2:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Fred needs your help with his Mafia in Mafia Wars.", null, currentDate);
-                                        break;
-                                    case 3:
-                                        newMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, option.Gestures[0], emotion + "New Facebook notification: Jenny has commented on one of your posts.", null, currentDate);
-                                        break;
-                                }
-                                option.LastAccessed = currentDate;
-                                notifications.Add(newMessageNotification);
-                            }
-                            break;
-                    }
-                }
-            }
-
-            return notifications;
-        }
-
         public void ResetLastAccessed(List<Objects.Option> options, int defaultPollingInterval)
         {
             if (options.Count(x => x.Active) > 0)
             {
-                DateTime currentDate = DateTime.Now;
-                DateTime defaultLastCheckedDate = currentDate.AddSeconds(-defaultPollingInterval);
+                DateTime currentDate = DateTime.Now.ToUniversalTime();
+                DateTime defaultLastCheckedDate = currentDate.AddMilliseconds(-defaultPollingInterval);
                 foreach (Objects.Option option in options.Where(x => x.Active))
                 {
                     switch ((FacebookOptionId)option.OptionId)

@@ -44,7 +44,7 @@
             // 
             // goToSiteButton
             // 
-            this.goToSiteButton.Location = new System.Drawing.Point(12, 113);
+            this.goToSiteButton.Location = new System.Drawing.Point(1, 113);
             this.goToSiteButton.Name = "goToSiteButton";
             this.goToSiteButton.Size = new System.Drawing.Size(75, 23);
             this.goToSiteButton.TabIndex = 1;
@@ -54,11 +54,11 @@
             // 
             // dismissButton
             // 
-            this.dismissButton.Location = new System.Drawing.Point(129, 113);
+            this.dismissButton.Location = new System.Drawing.Point(103, 113);
             this.dismissButton.Name = "dismissButton";
-            this.dismissButton.Size = new System.Drawing.Size(75, 23);
+            this.dismissButton.Size = new System.Drawing.Size(111, 23);
             this.dismissButton.TabIndex = 2;
-            this.dismissButton.Text = "Dismiss";
+            this.dismissButton.Text = "Dismiss all for site";
             this.dismissButton.UseVisualStyleBackColor = true;
             this.dismissButton.Click += new System.EventHandler(this.dismissButton_Click);
             // 
