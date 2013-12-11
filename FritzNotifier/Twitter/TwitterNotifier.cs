@@ -148,7 +148,7 @@ namespace FritzNotifier.Twitter
                                     foreach (var directMsg in directMsgs)
                                     {
                                         // handle appropriately
-                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDate);
+                                        var newDirectMessageNotification = new FritzNotifier.Objects.Notification(this.NotificationApplication, this.WebsiteOrProgramAddress, 0, directMsg.Sender.Name + " sent message " + directMsg.Text, "New message from " + directMsg.Sender.Name, currentDateLocal);
                                         notifications.Add(newDirectMessageNotification);
                                         option.LastAccessed = currentDate;
                                     }
